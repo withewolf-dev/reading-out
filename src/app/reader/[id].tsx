@@ -1,7 +1,6 @@
 import { Asset } from 'expo-asset';
 import { File } from 'expo-file-system';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { SymbolView } from 'expo-symbols';
@@ -10,6 +9,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ReaderView } from '../../../modules/speech-engine/src/ReaderView';
+import { BookCover } from '@/components/book-cover';
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
 import { putSetting } from '@/db';
@@ -168,13 +168,7 @@ export default function ReaderScreen() {
     return (
       <View style={[styles.screen, { backgroundColor: pageTop }]}>
         <View style={styles.opening}>
-          {params.coverUri ? (
-            <Image source={{ uri: params.coverUri }} style={styles.openingCover} contentFit="cover" />
-          ) : cover != null && Number.isFinite(cover) ? (
-            <Image source={cover} style={styles.openingCover} contentFit="cover" />
-          ) : (
-            <View style={[styles.openingCover, styles.coverEmpty]} />
-          )}
+          <BookCover title={title} coverPath={params.coverUri ?? cover} width={200} />
           <Text style={styles.openingTitle}>{title}</Text>
         </View>
         <View style={styles.openingFooter}>
@@ -302,8 +296,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.ground },
   reader: { flex: 1 },
   opening: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 },
-  openingCover: { width: 210, height: 305, borderRadius: 10, backgroundColor: '#E5E5EA' },
-  coverEmpty: { backgroundColor: '#D1D1D6' },
   openingTitle: {
     marginTop: 28,
     fontFamily: Fonts.sans,
