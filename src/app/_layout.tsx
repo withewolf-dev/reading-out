@@ -16,7 +16,9 @@ export default function RootLayout() {
       useSuspense={false}
       options={{ useNewConnection: false }}>
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Library' }} />
+        {/* The library draws its own bar: iOS always drops a large title onto a
+            second line below the toolbar, and we want the title on one row. */}
+        <Stack.Screen name="index" options={{ title: 'Library', headerShown: false }} />
         {/* Nothing at all across the top of the reader: no bar, no blur, no
             material, no scroll edge effect. Any of them draws a band with a
             visible seam against the tinted page. Only the back button is left,

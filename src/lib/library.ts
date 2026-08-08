@@ -83,7 +83,10 @@ export function buildLibrary(rows: ReadingRow[]): Library {
   const shelves: LibraryShelf[] = SHELVES.map((shelf) => ({
     ...shelf,
     items: byShelf.get(shelf.id) ?? [],
-  })).filter((shelf) => shelf.items.length > 0);
+    // A single card is not a shelf — it reads as a mistake next to a row that
+    // scrolls. Every book on a shelf this thin also sits on a fuller one, so
+    // nothing is lost by dropping it.
+  })).filter((shelf) => shelf.items.length > 1);
 
   // Imports come first: they are the only thing here the reader chose.
   if (imported.length > 0) {
