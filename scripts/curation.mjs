@@ -43,22 +43,6 @@ export const SHELVES = [
 export const BOOKS = [
   // ── Romance ───────────────────────────────────────────────────────────────
   {
-    slug: 'pride-and-prejudice',
-    // Not #1342: that edition opens with a five-page Saintsbury preface and no
-    // chapter heading, so a listener hears literary criticism before Austen.
-    // #42671 is the 1813 first-edition text, chapter headings intact.
-    pg: 42671,
-    noCover: true,
-    title: 'Pride and Prejudice',
-    author: 'Jane Austen',
-    year: 1813,
-    category: 'Romance',
-    shelves: ['featured', 'classics', 'romance'],
-    featured: true,
-    description:
-      'Elizabeth Bennet has judged Mr Darcy, and Mr Darcy has judged the Bennets. Austen spends four hundred pages proving both of them wrong, one perfectly balanced sentence at a time.',
-  },
-  {
     slug: 'persuasion',
     pg: 105,
     title: 'Persuasion',
@@ -127,18 +111,6 @@ export const BOOKS = [
     shelves: ['classics', 'adventure'],
     description:
       'One captain, one whale, and several hundred pages of digression on rope, whiteness and God. Strange, funny, and far wilder than its reputation.',
-  },
-  {
-    slug: 'heart-of-darkness',
-    noCover: true,
-    pg: 219,
-    title: 'Heart of Darkness',
-    author: 'Joseph Conrad',
-    year: 1899,
-    category: 'Literary Fiction',
-    shelves: ['classics'],
-    description:
-      'A steamboat goes up the Congo to collect a man who has stopped pretending. Short, dense, and permanently unsettling.',
   },
   {
     slug: 'a-tale-of-two-cities',
@@ -423,22 +395,6 @@ export const BOOKS = [
       'A woman is prescribed rest and forbidden to write, so she writes anyway, about the wallpaper. Half an hour, and the last page rearranges the rest.',
   },
   {
-    // Kafka's Metamorphosis was the intended entry here and was cut: the only
-    // Gutenberg edition with a text file (#5200, the Wyllie translation) is
-    // still flagged copyright, and the public-domain #26298 has no retrievable
-    // text. Poe covers the same shelf with no doubt about the licence.
-    slug: 'the-works-of-edgar-allan-poe-volume-2',
-    noCover: true,
-    pg: 2148,
-    title: 'The Works of Edgar Allan Poe, Volume 2',
-    author: 'Edgar Allan Poe',
-    year: 1845,
-    category: 'Short Stories',
-    shelves: ['stories', 'gothic', 'mystery'],
-    description:
-      'The famous ones, in one volume: The Fall of the House of Usher, The Masque of the Red Death, The Cask of Amontillado, The Pit and the Pendulum. Twenty minutes each.',
-  },
-  {
     slug: 'the-legend-of-sleepy-hollow',
     pg: 41,
     title: 'The Legend of Sleepy Hollow',
@@ -486,18 +442,6 @@ export const BOOKS = [
       'Written by a man who taught himself to read while enslaved, and published while he could still be seized and returned. Two and a half hours, and unanswerable.',
   },
   {
-    slug: 'the-story-of-my-life',
-    noCover: true,
-    pg: 2397,
-    title: 'The Story of My Life',
-    author: 'Helen Keller',
-    year: 1903,
-    category: 'Autobiography',
-    shelves: ['lives'],
-    description:
-      'Keller was twenty-two when she wrote this. The chapter where the word "water" arrives is one of the great moments in autobiography.',
-  },
-  {
     slug: 'walden',
     pg: 205,
     title: 'Walden',
@@ -534,57 +478,6 @@ export const BOOKS = [
       'A job application in the form of a manual on holding power. Cold, specific, and still the book people mean when they say a name as an adjective.',
   },
   {
-    slug: 'tao-te-ching',
-    noCover: true,
-    pg: 216,
-    title: 'Tao Te Ching',
-    author: 'Laozi',
-    // Legge's 1891 translation is catalogued under its older romanisation.
-    aka: { title: ['The Tao Teh King'] },
-    year: -400,
-    category: 'Philosophy',
-    shelves: ['ideas'],
-    description:
-      'Eighty-one short chapters on doing less and yielding first. In this 1891 translation by James Legge, it takes under an hour and repays years.',
-  },
-  {
-    slug: 'the-art-of-war',
-    noCover: true,
-    pg: 132,
-    title: 'The Art of War',
-    author: 'Sun Tzu',
-    aka: { author: ['Sunzi'] },
-    year: -500,
-    category: 'Philosophy',
-    shelves: ['ideas'],
-    description:
-      'Thirteen chapters on winning before the fighting starts, in Lionel Giles’ 1910 translation with the classical commentary alongside.',
-  },
-  {
-    slug: 'dream-psychology',
-    noCover: true,
-    pg: 15489,
-    title: 'Dream Psychology',
-    author: 'Sigmund Freud',
-    year: 1920,
-    category: 'Psychology',
-    shelves: ['ideas'],
-    description:
-      'Freud’s own condensed introduction to dream interpretation, written for people who were never going to read the eight-hundred-page version.',
-  },
-  {
-    slug: 'as-a-man-thinketh',
-    noCover: true,
-    pg: 4507,
-    title: 'As a Man Thinketh',
-    author: 'James Allen',
-    year: 1903,
-    category: 'Self-Development',
-    shelves: ['ideas'],
-    description:
-      'The ancestor of every book about mindset, and about forty minutes long. Allen gave it away rather than sell it.',
-  },
-  {
     slug: 'a-modest-proposal',
     pg: 1080,
     title: 'A Modest Proposal',
@@ -609,18 +502,6 @@ export const BOOKS = [
   },
 
   // ── Science, history, travel ──────────────────────────────────────────────
-  {
-    slug: 'on-the-origin-of-species',
-    noCover: true,
-    pg: 1228,
-    title: 'On the Origin of Species',
-    author: 'Charles Darwin',
-    year: 1859,
-    category: 'Science',
-    shelves: ['world'],
-    description:
-      'Darwin’s first edition: patient, hedged, crammed with pigeons and barnacles, and building an argument he had sat on for twenty years.',
-  },
   {
     slug: 'relativity',
     // Not #5001: that record carries no plain-text format. #30155 is the same

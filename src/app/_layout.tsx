@@ -17,7 +17,25 @@ export default function RootLayout() {
       options={{ useNewConnection: false }}>
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Library' }} />
-        <Stack.Screen name="reader/[id]" options={{ title: '' }} />
+        {/* Nothing at all across the top of the reader: no bar, no blur, no
+            material, no scroll edge effect. Any of them draws a band with a
+            visible seam against the tinted page. Only the back button is left,
+            floating in its own glass pill. */}
+        <Stack.Screen
+          name="reader/[id]"
+          options={{
+            title: '',
+            headerTransparent: true,
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: 'transparent' },
+            scrollEdgeEffects: {
+              top: 'hidden',
+              bottom: 'automatic',
+              left: 'automatic',
+              right: 'automatic',
+            },
+          }}
+        />
       </Stack>
     </SQLiteProvider>
   );

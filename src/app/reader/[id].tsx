@@ -1,74 +1,123 @@
+import { Asset } from 'expo-asset';
+import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
-import { useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
+import { ReaderView } from '../../../modules/speech-engine/src/ReaderView';
 import { mark, sinceStart } from '@/lib/perf';
 
 /**
- * STRIPPED FOR MEASUREMENT — every piece of business logic is gone. No SQLite,
- * no speech engine, no preferences, no native ReaderView, no assets, no
- * effects that touch anything. Pushing to this screen is pure navigation, so
- * whatever time still passes between the tap and these numbers appearing
- * belongs to React Navigation and UIKit rather than to this app's code.
+ * Cover, title and a loading indicator while the book is read off the bundle;
+ * the native ReaderView takes the screen the moment the text lands.
  *
- * The real screen is preserved at `.backup/reader-id.tsx.bak`.
+ * Everything the screen needs arrives as route params, so the first frame draws
+ * with no lookup and no storage — only the text is fetched, and that is the one
+ * thing that cannot be carried in a URL.
  */
 export default function ReaderScreen() {
-  const params = useLocalSearchParams<{ id: string; cover?: string }>();
+  const params = useLocalSearchParams<{
+    id: string;
+    title?: string;
+    cover?: string;
+    text?: string;
+    bodyOffset?: string;
+  }>();
 
-  // Handed over by the library through the route. Params are serialised, so the
-  // asset handle arrives as a string; the asset registry still resolves it once
-  // it is a number again.
+  // Params are serialised, so asset handles arrive as strings; the asset
+  // registry still resolves them once they are numbers again.
   const cover = params.cover ? Number(params.cover) : null;
+  const textAsset = params.text ? Number(params.text) : null;
+  const startOffset = params.bodyOffset ? Number(params.bodyOffset) : 0;
 
-  // Captured during the very first render, before React has committed anything.
-  // There are no effects left anywhere in the app, so this is the only moment
-  // this screen can measure — `tap → commit` and `tap → next frame` needed a
-  // `useEffect` and a `requestAnimationFrame` to observe, and both are gone.
-  const firstRender = useRef(sinceStart()).current;
+  const [text, setText] = useState<string | null>(null);
+  const [coverPath, setCoverPath] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
-  // Emitted to the console, which reaches Metro, so a tap can be read off the
-  // terminal rather than screenshotted.
   const logged = useRef(false);
   if (!logged.current) {
     logged.current = true;
-    mark(`reader first render (cover=${params.cover || 'none'})`);
+    mark(`reader first render (${params.id})`);
+  }
+
+  useEffect(() => {
+    if (textAsset == null || !Number.isFinite(textAsset)) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        // The cover resolves to a file:// path first — the native view derives
+        // the page tint from it, and it is far smaller than the book.
+        if (cover != null && Number.isFinite(cover)) {
+          const art = Asset.fromModule(cover);
+          if (!art.localUri) await art.downloadAsync();
+          if (!cancelled) setCoverPath(art.localUri ?? art.uri);
+        }
+
+        const asset = Asset.fromModule(textAsset);
+        if (!asset.localUri) await asset.downloadAsync();
+        const body = await new File(asset.localUri ?? asset.uri).text();
+        if (cancelled) return;
+
+        mark(`text loaded (${body.length} chars)`);
+        setText(body);
+      } catch {
+        if (!cancelled) setFailed(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cover, textAsset]);
+
+  if (text != null) {
+    return (
+      <ReaderView
+        style={styles.reader}
+        text={text}
+        fontSize={19}
+        active={false}
+        startOffset={startOffset}
+        hue={210}
+        coverPath={coverPath}
+      />
+    );
   }
 
   return (
     <View style={styles.screen}>
-      {cover != null && Number.isFinite(cover) ? (
-        <Image source={cover} style={styles.cover} contentFit="cover" />
-      ) : (
-        <View style={[styles.cover, styles.coverEmpty]} />
-      )}
-      <Text style={styles.book}>{params.id}</Text>
-      <Row label="tap → first render" value={firstRender} />
-      <Text style={styles.note}>
-        Nothing else runs on this screen. No database, no text, no native view,
-        no effects.
-      </Text>
-    </View>
-  );
-}
+      <View style={styles.middle}>
+        {cover != null && Number.isFinite(cover) ? (
+          <Image source={cover} style={styles.cover} contentFit="cover" />
+        ) : (
+          <View style={[styles.cover, styles.coverEmpty]} />
+        )}
+        <Text style={styles.title}>{params.title ?? params.id}</Text>
+      </View>
 
-function Row({ label, value }: { label: string; value: number | null }) {
-  return (
-    <View style={styles.row}>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value == null ? '…' : `${value} ms`}</Text>
+      <View style={styles.footer}>
+        {failed ? (
+          <Text style={styles.loading}>This book could not be opened.</Text>
+        ) : (
+          <>
+            <ActivityIndicator color="#8A8A8E" />
+            <Text style={styles.loading}>Loading the book…</Text>
+          </>
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#FFFFFF', paddingHorizontal: 24, paddingTop: 120 },
-  cover: { width: 160, height: 232, borderRadius: 8, backgroundColor: '#E5E5EA', marginBottom: 28 },
+  screen: { flex: 1, backgroundColor: '#FFFFFF' },
+  reader: { flex: 1 },
+  middle: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 },
+  cover: { width: 210, height: 305, borderRadius: 10, backgroundColor: '#E5E5EA' },
   coverEmpty: { backgroundColor: '#D1D1D6' },
-  book: { fontSize: 15, color: '#8A8A8E', marginBottom: 28 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-  label: { fontSize: 17, color: '#3A3A3C' },
-  value: { fontSize: 22, fontWeight: '700', color: '#000000', fontVariant: ['tabular-nums'] },
-  note: { fontSize: 13, color: '#8A8A8E', marginTop: 28, lineHeight: 18 },
+  title: { marginTop: 28, fontSize: 22, fontWeight: '600', color: '#000000', textAlign: 'center' },
+  footer: { alignItems: 'center', gap: 10, paddingBottom: 56 },
+  loading: { fontSize: 14, color: '#8A8A8E' },
 });

@@ -67,42 +67,6 @@
   ],
   "books": [
     {
-      "id": "pride-and-prejudice",
-      "title": "Pride and Prejudice",
-      "author": "Jane Austen",
-      "category": "Romance",
-      "year": 1813,
-      "description": "Elizabeth Bennet has judged Mr Darcy, and Mr Darcy has judged the Bennets. Austen spends four hundred pages proving both of them wrong, one perfectly balanced sentence at a time.",
-      "shelves": [
-        "featured",
-        "classics",
-        "romance",
-        "long"
-      ],
-      "featured": true,
-      "file": "books/pride-and-prejudice/book.txt",
-      "cover": null,
-      "wordCount": 121886,
-      "charCount": 686419,
-      "estimatedReadingTime": 488,
-      "estimatedListeningTime": 677,
-      "bodyOffset": 380,
-      "snippet": "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/42671",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/42671.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/42671/pg42671.cover.medium.jpg",
-        "gutenbergId": 42671,
-        "gutenbergTitle": "Pride and Prejudice",
-        "gutenbergAuthor": "Jane Austen",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "818a20271a246bf5"
-      }
-    },
-    {
       "id": "persuasion",
       "title": "Persuasion",
       "author": "Jane Austen",
@@ -309,40 +273,6 @@
         "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
         "retrieved": "2026-08-08",
         "sha256": "dd55c690763fc2fe"
-      }
-    },
-    {
-      "id": "heart-of-darkness",
-      "title": "Heart of Darkness",
-      "author": "Joseph Conrad",
-      "category": "Literary Fiction",
-      "year": 1899,
-      "description": "A steamboat goes up the Congo to collect a man who has stopped pretending. Short, dense, and permanently unsettling.",
-      "shelves": [
-        "classics",
-        "sitting"
-      ],
-      "featured": false,
-      "file": "books/heart-of-darkness/book.txt",
-      "cover": null,
-      "wordCount": 37917,
-      "charCount": 209839,
-      "estimatedReadingTime": 152,
-      "estimatedListeningTime": 211,
-      "bodyOffset": 60,
-      "snippet": "The Nellie, a cruising yawl, swung to her anchor without a flutter of the sails, and was at rest. The flood had made, the wind was nearly c…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/219",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/219.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/219/pg219.cover.medium.jpg",
-        "gutenbergId": 219,
-        "gutenbergTitle": "Heart of Darkness",
-        "gutenbergAuthor": "Joseph Conrad",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "52e85b686b63c51c"
       }
     },
     {
@@ -1169,41 +1099,6 @@
       }
     },
     {
-      "id": "the-works-of-edgar-allan-poe-volume-2",
-      "title": "The Works of Edgar Allan Poe, Volume 2",
-      "author": "Edgar Allan Poe",
-      "category": "Short Stories",
-      "year": 1845,
-      "description": "The famous ones, in one volume: The Fall of the House of Usher, The Masque of the Red Death, The Cask of Amontillado, The Pit and the Pendulum. Twenty minutes each.",
-      "shelves": [
-        "stories",
-        "gothic",
-        "mystery"
-      ],
-      "featured": false,
-      "file": "books/the-works-of-edgar-allan-poe-volume-2/book.txt",
-      "cover": null,
-      "wordCount": 95043,
-      "charCount": 547240,
-      "estimatedReadingTime": 380,
-      "estimatedListeningTime": 528,
-      "bodyOffset": 806,
-      "snippet": "At Paris, just after dark one gusty evening in the autumn of 18-, I was enjoying the twofold luxury of meditation and a meerschaum, in comp…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/2148",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/2148.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/2148/pg2148.cover.medium.jpg",
-        "gutenbergId": 2148,
-        "gutenbergTitle": "The Works of Edgar Allan Poe — Volume 2",
-        "gutenbergAuthor": "Edgar Allan Poe",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "16f6fc13da0edfdb"
-      }
-    },
-    {
       "id": "the-legend-of-sleepy-hollow",
       "title": "The Legend of Sleepy Hollow",
       "author": "Washington Irving",
@@ -1342,40 +1237,6 @@
       }
     },
     {
-      "id": "the-story-of-my-life",
-      "title": "The Story of My Life",
-      "author": "Helen Keller",
-      "category": "Autobiography",
-      "year": 1903,
-      "description": "Keller was twenty-two when she wrote this. The chapter where the word \"water\" arrives is one of the great moments in autobiography.",
-      "shelves": [
-        "lives",
-        "long"
-      ],
-      "featured": false,
-      "file": "books/the-story-of-my-life/book.txt",
-      "cover": null,
-      "wordCount": 134872,
-      "charCount": 734271,
-      "estimatedReadingTime": 539,
-      "estimatedListeningTime": 749,
-      "bodyOffset": 2842,
-      "snippet": "It is with a kind of fear that I begin to write the history of my life. I have, as it were, a superstitious hesitation in lifting the veil…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/2397",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/2397.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/2397/pg2397.cover.medium.jpg",
-        "gutenbergId": 2397,
-        "gutenbergTitle": "The Story of My Life",
-        "gutenbergAuthor": "Helen Keller",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "6094edabdab4fbe5"
-      }
-    },
-    {
       "id": "walden",
       "title": "Walden",
       "author": "Henry David Thoreau",
@@ -1478,140 +1339,6 @@
       }
     },
     {
-      "id": "tao-te-ching",
-      "title": "Tao Te Ching",
-      "author": "Laozi",
-      "category": "Philosophy",
-      "year": -400,
-      "description": "Eighty-one short chapters on doing less and yielding first. In this 1891 translation by James Legge, it takes under an hour and repays years.",
-      "shelves": [
-        "ideas",
-        "short"
-      ],
-      "featured": false,
-      "file": "books/tao-te-ching/book.txt",
-      "cover": null,
-      "wordCount": 10657,
-      "charCount": 58385,
-      "estimatedReadingTime": 43,
-      "estimatedListeningTime": 59,
-      "bodyOffset": 95,
-      "snippet": "Ch. 1. 1. The Tao that can be trodden is not the enduring and unchanging Tao. The name that can be named is not the enduring and unchanging…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/216",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/216.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/216/pg216.cover.medium.jpg",
-        "gutenbergId": 216,
-        "gutenbergTitle": "The Tao Teh King, or the Tao and its Characteristics",
-        "gutenbergAuthor": "Laozi",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "45b6273402d16397"
-      }
-    },
-    {
-      "id": "the-art-of-war",
-      "title": "The Art of War",
-      "author": "Sun Tzu",
-      "category": "Philosophy",
-      "year": -500,
-      "description": "Thirteen chapters on winning before the fighting starts, in Lionel Giles’ 1910 translation with the classical commentary alongside.",
-      "shelves": [
-        "ideas"
-      ],
-      "featured": false,
-      "file": "books/the-art-of-war/book.txt",
-      "cover": null,
-      "wordCount": 55019,
-      "charCount": 311231,
-      "estimatedReadingTime": 220,
-      "estimatedListeningTime": 306,
-      "bodyOffset": 1061,
-      "snippet": "When Lionel Giles began his translation of Sun Tzŭ’s Art of War, the work was virtually unknown in Europe. Its introduction to Europe began…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/132",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/132.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/132/pg132.cover.medium.jpg",
-        "gutenbergId": 132,
-        "gutenbergTitle": "The Art of War",
-        "gutenbergAuthor": "active 6th century B.C. Sunzi",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "8dfdaedc3d655caa"
-      }
-    },
-    {
-      "id": "dream-psychology",
-      "title": "Dream Psychology",
-      "author": "Sigmund Freud",
-      "category": "Psychology",
-      "year": 1920,
-      "description": "Freud’s own condensed introduction to dream interpretation, written for people who were never going to read the eight-hundred-page version.",
-      "shelves": [
-        "ideas"
-      ],
-      "featured": false,
-      "file": "books/dream-psychology/book.txt",
-      "cover": null,
-      "wordCount": 53658,
-      "charCount": 318442,
-      "estimatedReadingTime": 215,
-      "estimatedListeningTime": 298,
-      "bodyOffset": 399,
-      "snippet": "The medical profession is justly conservative. Human life should not be considered as the proper material for wild experiments.",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/15489",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/15489.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/15489/pg15489.cover.medium.jpg",
-        "gutenbergId": 15489,
-        "gutenbergTitle": "Dream Psychology: Psychoanalysis for Beginners",
-        "gutenbergAuthor": "Sigmund Freud",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "5e14dae14ffa7233"
-      }
-    },
-    {
-      "id": "as-a-man-thinketh",
-      "title": "As a Man Thinketh",
-      "author": "James Allen",
-      "category": "Self-Development",
-      "year": 1903,
-      "description": "The ancestor of every book about mindset, and about forty minutes long. Allen gave it away rather than sell it.",
-      "shelves": [
-        "ideas",
-        "short"
-      ],
-      "featured": false,
-      "file": "books/as-a-man-thinketh/book.txt",
-      "cover": null,
-      "wordCount": 7560,
-      "charCount": 44613,
-      "estimatedReadingTime": 30,
-      "estimatedListeningTime": 42,
-      "bodyOffset": 71,
-      "snippet": "Mind is the Master power that moulds and makes, And Man is Mind, and evermore he takes The tool of Thought, and, shaping what he wills, Bri…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/4507",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/4507.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/4507/pg4507.cover.medium.jpg",
-        "gutenbergId": 4507,
-        "gutenbergTitle": "As a man thinketh",
-        "gutenbergAuthor": "James Allen",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "723f431e3e04722a"
-      }
-    },
-    {
       "id": "a-modest-proposal",
       "title": "A Modest Proposal",
       "author": "Jonathan Swift",
@@ -1679,40 +1406,6 @@
         "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
         "retrieved": "2026-08-08",
         "sha256": "0568f2afc2de71a4"
-      }
-    },
-    {
-      "id": "on-the-origin-of-species",
-      "title": "On the Origin of Species",
-      "author": "Charles Darwin",
-      "category": "Science",
-      "year": 1859,
-      "description": "Darwin’s first edition: patient, hedged, crammed with pigeons and barnacles, and building an argument he had sat on for twenty years.",
-      "shelves": [
-        "world",
-        "long"
-      ],
-      "featured": false,
-      "file": "books/on-the-origin-of-species/book.txt",
-      "cover": null,
-      "wordCount": 155526,
-      "charCount": 932143,
-      "estimatedReadingTime": 622,
-      "estimatedListeningTime": 864,
-      "bodyOffset": 693,
-      "snippet": "“But with regard to the material world, we can at least go so far as this—we can perceive that events are brought about not by insulated in…",
-      "source": {
-        "name": "Project Gutenberg",
-        "url": "https://www.gutenberg.org/ebooks/1228",
-        "downloadUrl": "https://www.gutenberg.org/ebooks/1228.txt.utf-8",
-        "coverUrl": "https://www.gutenberg.org/cache/epub/1228/pg1228.cover.medium.jpg",
-        "gutenbergId": 1228,
-        "gutenbergTitle": "On the Origin of Species By Means of Natural Selection",
-        "gutenbergAuthor": "Charles Darwin",
-        "license": "Public Domain (United States)",
-        "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
-        "retrieved": "2026-08-08",
-        "sha256": "c937ea07711b909a"
       }
     },
     {

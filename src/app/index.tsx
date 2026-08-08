@@ -27,7 +27,15 @@ export default function LibraryScreen() {
             // arrives as a string and has to be turned back into a number.
             router.push({
               pathname: '/reader/[id]',
-              params: { id: item.id, cover: item.cover == null ? '' : String(item.cover) },
+              params: {
+                id: item.id,
+                title: item.title,
+                cover: item.cover == null ? '' : String(item.cover),
+                // The book's text asset, so the reader can read it straight
+                // off the bundle without going near the catalogue or SQLite.
+                text: String(item.text),
+                bodyOffset: String(item.bodyOffset),
+              },
             });
             mark('push returned');
           }}>
