@@ -39,11 +39,15 @@ export default function RootLayout() {
         <Stack.Screen
           name="settings"
           options={{
-            title: 'Voice & Text',
             presentation: 'formSheet',
             sheetGrabberVisible: true,
-            sheetAllowedDetents: [0.6, 0.999],
-            sheetInitialDetentIndex: 0,
+            // The sheet draws its own title row: a native nav bar inside a sheet
+            // does not inset a scroll view reliably, and the first section ends
+            // up hidden behind it.
+            headerShown: false,
+            // The voice list is long — open tall, but let it be pulled down.
+            sheetAllowedDetents: [0.55, 0.999],
+            sheetInitialDetentIndex: 1,
           }}
         />
       </Stack>

@@ -94,18 +94,35 @@ public class SpeechEngineModule: Module {
                         "name": voice.name,
                         "language": voice.language,
                         "displayName": voice.displayName,
-                        // Enhanced/Premium are the downloadable ones worth telling users about
-                        "quality": voice.quality == .default ? "default" : "enhanced",
+                        // Enhanced/Premium are the downloadable ones worth telling
+                        // users about — the default ones are the compact voices
+                        // people mistake for the app sounding bad (§POC critique 10).
+                        "quality": {
+                            switch voice.quality {
+                            case .premium: return "premium"
+                            case .enhanced: return "enhanced"
+                            default: return "default"
+                            }
+                        }(),
+                        // voiceTraits is iOS 17+, and the app targets 16.4.
+                        "isPersonalVoice": {
+                            if #available(iOS 17.0, *) {
+                                return voice.voiceTraits.contains(.isPersonalVoice)
+                            }
+                            return false
+                        }(),
+                        // The novelty voices — Bells, Boing, Bubbles — are the ones
+                        // with no gender. It is the only signal iOS gives that
+                        // separates them from voices meant for reading prose.
+                        "isNovelty": voice.gender == .unspecified,
                     ]
                 }
         }
 
         /// AVFoundation's own 0…1 rate scale — no mapping layer to get wrong (§13b).
-        Constants([
-            "minRate": AVSpeechUtteranceMinimumSpeechRate,
-            "maxRate": AVSpeechUtteranceMaximumSpeechRate,
-            "defaultRate": AVSpeechUtteranceDefaultSpeechRate,
-        ])
+        Constant("minRate") { AVSpeechUtteranceMinimumSpeechRate }
+        Constant("maxRate") { AVSpeechUtteranceMaximumSpeechRate }
+        Constant("defaultRate") { AVSpeechUtteranceDefaultSpeechRate }
     }
 
     private func updateTimer(running: Bool) {

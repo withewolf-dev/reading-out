@@ -14,7 +14,11 @@ export type SpeechVoice = {
   name: string;
   language: string;
   displayName: string;
-  quality: 'default' | 'enhanced';
+  /** `default` is the compact voice; the other two are downloaded in iOS Settings. */
+  quality: 'default' | 'enhanced' | 'premium';
+  isPersonalVoice: boolean;
+  /** Bells, Boing, Bubbles — fine for a joke, useless for a book. */
+  isNovelty: boolean;
 };
 
 export type SpeechEngineEvents = {
