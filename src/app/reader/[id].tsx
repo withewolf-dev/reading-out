@@ -6,14 +6,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
-
 import { ReaderView } from '../../../modules/speech-engine/src/ReaderView';
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
 import { getReading, getReadingText, putSetting, touchOpened, type ReadingRow } from '@/db';
-import { groupThousands, percentLabel, remainingLabel } from '@/lib/text';
 import { player, prefs, RATE, usePlayer, usePrefs } from '@/speech/engine';
 import { Colors, coverHue, Fonts, Radius, Screen, Space, tintedSurface, Track } from '@/theme';
 
@@ -83,18 +79,22 @@ export default function ReaderScreen() {
   }, [db, rate]);
 
   const speedLabel = `${Math.round((rate / RATE.default) * 100) / 100}×`;
+  const multiplier = rate / RATE.default;
 
   // While this reading is playing the engine's position is the truth; otherwise
   // fall back to what was persisted.
   const offset = isCurrent ? state.offset : (reading?.progress_offset ?? 0);
   const total = reading?.char_count ?? 0;
   const fraction = total > 0 ? Math.min(1, offset / total) : 0;
-  const wordsPerMinute = 180 * (rate / RATE.default);
+  // ~18 UTF-16 units/sec at 1× (§19.1) — elapsed and remaining as clock time,
+  // the way the reference labels its scrubber.
+  const unitsPerSecond = 18 * multiplier;
+  const elapsedSeconds = offset / unitsPerSecond;
+  const remainingSeconds = Math.max(0, (total - offset) / unitsPerSecond);
 
   // The page, the nav bar and the dock are one continuous field of the cover's
   // colour — Apple Podcasts floods the whole screen rather than framing it (§15).
   const pageTop = tintedSurface(tint.hue, tint.saturation, 0.3);
-  const dockColor = tintedSurface(tint.hue, tint.saturation * 1.05, 0.13);
 
   return (
     <View style={[styles.screen, { backgroundColor: pageTop }]}>
@@ -139,34 +139,20 @@ export default function ReaderScreen() {
         </Text>
       </View>
 
-      {/* A real material, not a painted panel — the controls float on frosted
-          glass over the tinted page. */}
-      <BlurView tint="systemUltraThinMaterialDark" intensity={70} style={styles.dock}>
-        <LinearGradient
-          colors={['transparent', dockColor]}
-          locations={[0, 0.75]}
-          style={StyleSheet.absoluteFill}
-          pointerEvents="none"
-        />
-
-        <ProgressTrack fraction={fraction} height={Track.card} />
+      {/* Apple Podcasts' transcript controls: everything sits directly on the
+          tinted page — no panel, no glass, no border (§15). */}
+      <View style={styles.dock}>
+        <ProgressTrack fraction={fraction} height={4} />
         <View style={styles.progressRow}>
-          {/* Size before you start, progress once you're underway — the word
-              count stops mattering the moment there's a percentage. */}
-          <Text style={styles.progressLabel}>
-            {percentLabel(fraction) ?? `${groupThousands(reading?.word_count ?? 0)} words`}
-          </Text>
-          <Text style={styles.progressLabel}>
-            {remainingLabel(reading?.word_count ?? 0, fraction, wordsPerMinute)}
-          </Text>
+          <Text style={styles.progressLabel}>{clockLabel(elapsedSeconds)}</Text>
+          <Text style={styles.progressLabel}>−{clockLabel(remainingSeconds)}</Text>
         </View>
 
         <View style={styles.controlRow}>
           <Pressable onPress={cycleSpeed} hitSlop={12} accessibilityRole="button" accessibilityLabel={`Speed ${speedLabel}`}>
             <Text style={styles.speed}>{speedLabel}</Text>
           </Pressable>
-          <ControlButton symbol="gobackward.15" size={30} label="Back 15 seconds" onPress={() => player.skip(-15)} />
-          {/* A bare glyph, larger — the reference has no button chrome here */}
+          <ControlButton symbol="gobackward.15" size={34} label="Back 15 seconds" onPress={() => player.skip(-15)} />
           <Pressable
             onPress={togglePlay}
             hitSlop={16}
@@ -174,17 +160,27 @@ export default function ReaderScreen() {
             accessibilityLabel={playing ? 'Pause' : 'Play'}>
             <SymbolView
               name={playing ? 'pause.fill' : 'play.fill'}
-              size={40}
+              size={46}
               tintColor={Colors.primary}
               fallback={<Text style={styles.fallback}>{playing ? '❚❚' : '▶'}</Text>}
             />
           </Pressable>
-          <ControlButton symbol="goforward.30" size={30} label="Forward 30 seconds" onPress={() => player.skip(30)} />
-          <ControlButton symbol="waveform" size={24} label="Voice and text" onPress={() => router.push('/settings')} />
+          <ControlButton symbol="goforward.30" size={34} label="Forward 30 seconds" onPress={() => player.skip(30)} />
+          <ControlButton symbol="waveform" size={26} label="Voice and text" onPress={() => router.push('/settings')} />
         </View>
-      </BlurView>
+      </View>
     </View>
   );
+}
+
+/** "8:17", "27:58", "21:04:11" — elapsed/remaining in clock form. */
+function clockLabel(totalSeconds: number): string {
+  const whole = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(whole / 3600);
+  const m = Math.floor((whole % 3600) / 60);
+  const s = whole % 60;
+  const mm = h > 0 ? String(m).padStart(2, '0') : String(m);
+  return `${h > 0 ? `${h}:` : ''}${mm}:${String(s).padStart(2, '0')}`;
 }
 
 function ControlButton({
@@ -242,20 +238,18 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     gap: Space.s,
-    paddingHorizontal: Screen.margin + Space.s,
-    paddingTop: Space.xl,
-    paddingBottom: 40,
-    overflow: 'hidden',
+    paddingHorizontal: Screen.margin + Space.xs,
+    paddingBottom: 44,
     zIndex: 10,
   },
-  progressRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  progressLabel: { fontFamily: Fonts.sans, fontSize: 12, color: Colors.inactive },
   controlRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: Space.m,
+    marginTop: 28,
   },
-  speed: { fontFamily: Fonts.sans, fontSize: 15, color: Colors.secondary, minWidth: 42, textAlign: 'center' },
+  progressRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  progressLabel: { fontFamily: Fonts.sans, fontSize: 14, color: Colors.inactive },
+  speed: { fontFamily: Fonts.sans, fontSize: 17, color: Colors.secondary, minWidth: 42, textAlign: 'center' },
   fallback: { color: Colors.secondary, fontSize: 13 },
 });

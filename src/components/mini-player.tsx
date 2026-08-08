@@ -3,6 +3,7 @@ import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { GlassPanel } from '@/components/glass-panel';
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
 import { percentLabel, remainingLabel } from '@/lib/text';
@@ -33,7 +34,7 @@ export function MiniPlayer({ onOpen, coverPath, wordCount = 0 }: Props) {
       style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, Space.m) }]}
       accessibilityRole="button"
       accessibilityLabel={`Open ${state.title}`}>
-      <View style={styles.bar}>
+      <GlassPanel style={styles.bar}>
         <ReadingArtwork
           title={state.title}
           coverPath={coverPath}
@@ -67,7 +68,7 @@ export function MiniPlayer({ onOpen, coverPath, wordCount = 0 }: Props) {
             fallback={<Text style={styles.fallback}>{playing ? '❚❚' : '▶'}</Text>}
           />
         </Pressable>
-      </View>
+      </GlassPanel>
     </Pressable>
   );
 }
@@ -81,9 +82,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingRight: Space.l,
     borderRadius: Radius.miniPlayer,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.stroke,
-    backgroundColor: 'rgba(28,28,30,0.94)',
+    overflow: 'hidden',
   },
   body: { flex: 1, gap: 6 },
   title: { fontFamily: Fonts.sans, fontSize: 14, color: Colors.primary },

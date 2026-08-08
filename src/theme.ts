@@ -75,13 +75,19 @@ export function coverColors(title: string): [string, string] {
  * A surface in the reading's own colour. `brightness` is HSB, matching the
  * SwiftUI side so the header, page and dock land on one continuous field.
  */
-export function tintedSurface(hue: number, saturation: number, brightness: number): string {
-  return hsl(hue, saturation, brightness);
+export function tintedSurface(
+  hue: number,
+  saturation: number,
+  brightness: number,
+  alpha = 1
+): string {
+  return hsl(hue, saturation, brightness, alpha);
 }
 
-function hsl(h: number, s: number, b: number): string {
+function hsl(h: number, s: number, b: number, alpha = 1): string {
   // HSB → CSS hsl(), matching the SwiftUI values in §18
   const l = (b * (2 - s)) / 2;
   const sl = l === 0 || l === 1 ? 0 : (b * s) / (1 - Math.abs(2 * l - 1));
-  return `hsl(${h}, ${Math.round(sl * 100)}%, ${Math.round(l * 100)}%)`;
+  const parts = `${h}, ${Math.round(sl * 100)}%, ${Math.round(l * 100)}%`;
+  return alpha >= 1 ? `hsl(${parts})` : `hsla(${parts}, ${alpha})`;
 }

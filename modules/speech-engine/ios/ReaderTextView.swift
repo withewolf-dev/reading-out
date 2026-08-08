@@ -194,14 +194,17 @@ struct ReaderTextView: View {
             // Text dissolves as it passes under the header rather than being cut
             // off by it — the top fade in Apple's transcript view (§15).
             .mask(
-                // The fade has to clear the floating header, not just the nav bar,
-                // or text sits at full strength right behind the title.
+                // The fades have to clear the floating header and the control
+                // area — text dissolves before it reaches either, instead of
+                // running through them at full strength.
                 LinearGradient(
                     stops: [
                         .init(color: .clear, location: 0),
                         .init(color: .black.opacity(0.10), location: 0.10),
                         .init(color: .black, location: 0.22),
-                        .init(color: .black, location: 1),
+                        .init(color: .black, location: 0.72),
+                        .init(color: .black.opacity(0.15), location: 0.85),
+                        .init(color: .clear, location: 0.92),
                     ],
                     startPoint: .top,
                     endPoint: .bottom
