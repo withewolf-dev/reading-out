@@ -251,12 +251,16 @@ export default function LibraryScreen() {
         </Animated.View>
 
         {hero ? (
-          // A short scrim so the clock and battery read over any cover.
-          <LinearGradient
-            colors={['rgba(0,0,0,0.38)', 'rgba(0,0,0,0)']}
-            style={[StyleSheet.absoluteFill, { bottom: undefined, height: insets.top + Space.s }]}
-            pointerEvents="none"
-          />
+          // A scrim over the status bar *and* the toolbar row. A pale cover —
+          // the washed-out painting on The Thirty-Nine Steps, say — swallows
+          // white type otherwise, and the covers are not ours to control.
+          <Animated.View style={[StyleSheet.absoluteFill, onArtwork]} pointerEvents="none">
+            <LinearGradient
+              colors={['rgba(0,0,0,0.55)', 'rgba(0,0,0,0.34)', 'rgba(0,0,0,0)']}
+              locations={[0, 0.55, 1]}
+              style={[StyleSheet.absoluteFill, { bottom: undefined, height: insets.top + 76 }]}
+            />
+          </Animated.View>
         ) : null}
 
         {/* Two rows stacked in the same box, cross-fading. The dark set lays
@@ -303,8 +307,15 @@ function HeaderIcon({
   onPress: () => void;
   tint?: string;
 }) {
+  const onArtwork = tint === '#FFFFFF';
   return (
-    <Pressable hitSlop={10} onPress={onPress} accessibilityRole="button" accessibilityLabel={label}>
+    <Pressable
+      hitSlop={10}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      // A glyph has no text shadow of its own, so the whole view carries one.
+      style={onArtwork ? styles.iconOnArtwork : undefined}>
       <SymbolView
         name={symbol as never}
         size={20}
@@ -344,10 +355,17 @@ const styles = StyleSheet.create({
   },
   barTitleOnArtwork: {
     color: '#FFFFFF',
-    // Artwork is unpredictable behind large type; a soft shadow keeps the
-    // title legible over a pale cover without a scrim.
-    textShadowColor: 'rgba(0,0,0,0.45)',
-    textShadowRadius: 12,
+    // Belt and braces with the scrim: artwork behind large type is
+    // unpredictable, and a pale cover will eat white letterforms.
+    textShadowColor: 'rgba(0,0,0,0.55)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 10,
+  },
+  iconOnArtwork: {
+    shadowColor: '#000000',
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 1 },
   },
   headerButtons: {
     flexDirection: 'row',
