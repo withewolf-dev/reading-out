@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ContinueCard } from '@/components/continue-card';
+import { ImportCard } from '@/components/import-card';
 import { MiniPlayer } from '@/components/mini-player';
 import { CARD_WIDTH, ShelfItem } from '@/components/shelf-item';
 import { mark, markStart } from '@/lib/perf'; // TEMPORARY instrumentation
@@ -58,6 +59,10 @@ export default function LibraryScreen() {
   // The cards still draw their play pill and take a long press; nothing is
   // behind either while playback lives on the reader.
   const noop = useCallback(() => {}, []);
+
+  // The card is here; the pipeline behind it is not. Importing needs a file
+  // picker and somewhere to keep the text, and both went when storing did.
+  const importBook = useCallback(() => {}, []);
 
   // `rate` is AVFoundation's own 0…1 scale, so normalise it before turning
   // words into minutes.
@@ -126,21 +131,19 @@ export default function LibraryScreen() {
         maxToRenderPerBatch={3}
         windowSize={5}
         ListHeaderComponent={
-          library.continuing ? (
-            <ContinueCard
-              entry={library.continuing}
-              isPlaying={false}
-              wordsPerMinute={wordsPerMinute}
-              onOpen={() => openEntry(library.continuing!)}
-              onTogglePlay={noop}
-              onLongPress={noop}
-            />
-          ) : (
-            <Text style={styles.intro}>
-              Thirty books, ready to be read aloud. Pick one and press play — ReadingLoud
-              highlights each word as it goes.
-            </Text>
-          )
+          <>
+            <ImportCard onImport={importBook} />
+            {library.continuing ? (
+              <ContinueCard
+                entry={library.continuing}
+                isPlaying={false}
+                wordsPerMinute={wordsPerMinute}
+                onOpen={() => openEntry(library.continuing!)}
+                onTogglePlay={noop}
+                onLongPress={noop}
+              />
+            ) : null}
+          </>
         }
       />
 
@@ -160,13 +163,6 @@ const styles = StyleSheet.create({
   },
   barTitle: { fontFamily: Fonts.sans, fontSize: 34, fontWeight: '700', color: Colors.primary },
   content: { paddingTop: Space.s, paddingBottom: 120 },
-  intro: {
-    fontFamily: Fonts.sans,
-    fontSize: 15,
-    lineHeight: 22,
-    color: Colors.inactive,
-    marginHorizontal: Screen.margin,
-  },
   sectionTitle: {
     fontFamily: Fonts.sans,
     fontSize: 20,
