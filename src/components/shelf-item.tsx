@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ProgressTrack } from '@/components/progress-track';
 import { durationLabel, progressFraction, type LibraryEntry } from '@/lib/library';
-import { Colors, coverColors, Fonts, Radius, Space } from '@/theme';
+import { coverColors, Fonts, Radius, Space } from '@/theme';
 
 type Props = {
   entry: LibraryEntry;
@@ -17,13 +17,21 @@ type Props = {
 };
 
 /**
- * An episode-style card (Apple Podcasts): the cover fills the top of the card,
- * a black gradient rises from its base so the serif title reads over any
- * artwork, and below sit eyebrow, title, description, and a play pill carrying
- * the one number that matters — how long the book runs, or how much is left.
+ * The cover *is* the card. Artwork fills the whole tile and a black gradient
+ * rises from its base to carry the eyebrow, title, description and play pill —
+ * no separate body panel underneath.
+ *
+ * Everything here is white on dark by construction, so it deliberately ignores
+ * the app's ink scale: the surface is artwork, not a themed background.
  */
 const CARD_WIDTH = 264;
-const IMAGE_HEIGHT = 224;
+const CARD_HEIGHT = 372;
+
+const Ink = {
+  title: 'rgba(255,255,255,0.98)',
+  body: 'rgba(255,255,255,0.76)',
+  eyebrow: 'rgba(255,255,255,0.62)',
+} as const;
 
 function ShelfItemView({ entry, isPlaying, onPress, onPlay, onLongPress }: Props) {
   const fraction = progressFraction(entry);
@@ -37,51 +45,46 @@ function ShelfItemView({ entry, isPlaying, onPress, onPlay, onLongPress }: Props
   const eyebrow = entry.book
     ? [entry.book.category, entry.author].filter(Boolean).join(' · ')
     : 'Your file';
+  const description = entry.book?.description ?? entry.row?.snippet ?? '';
   const [gradientTop, gradientBottom] = coverColors(entry.title);
 
   return (
     <Pressable onPress={onPress} onLongPress={onLongPress} style={styles.card}>
-      <View style={styles.imageWrap}>
-        {entry.cover ? (
-          <Image
-            source={typeof entry.cover === 'number' ? entry.cover : { uri: entry.cover }}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-          />
-        ) : (
-          <LinearGradient
-            colors={[gradientTop, gradientBottom]}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={StyleSheet.absoluteFill}
-          />
-        )}
-        {/* The scrim that makes the title legible over any artwork. */}
+      {entry.cover ? (
+        <Image
+          source={typeof entry.cover === 'number' ? entry.cover : { uri: entry.cover }}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+        />
+      ) : (
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.14)', 'rgba(0,0,0,0.62)']}
-          locations={[0.35, 0.6, 1]}
+          colors={[gradientTop, gradientBottom]}
+          start={{ x: 0.1, y: 0 }}
+          end={{ x: 0.9, y: 1 }}
           style={StyleSheet.absoluteFill}
         />
-        <Text numberOfLines={2} style={styles.imageTitle}>
-          {entry.title}
-        </Text>
-        {started ? (
-          <View style={styles.progress}>
-            <ProgressTrack fraction={fraction} height={3} />
-          </View>
-        ) : null}
-      </View>
+      )}
 
-      <View style={styles.body}>
+      {/* Reaches full black well before the text starts, so a pale cover can't
+          wash out the title. */}
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.55)', 'rgba(0,0,0,0.92)', 'rgba(0,0,0,0.96)']}
+        locations={[0.18, 0.46, 0.72, 1]}
+        style={StyleSheet.absoluteFill}
+      />
+
+      <View style={styles.content}>
         <Text numberOfLines={1} style={styles.eyebrow}>
           {eyebrow}
         </Text>
         <Text numberOfLines={2} style={styles.title}>
           {entry.title}
         </Text>
-        <Text numberOfLines={2} style={styles.description}>
-          {entry.book?.description ?? entry.row?.snippet ?? ''}
-        </Text>
+        {description ? (
+          <Text numberOfLines={2} style={styles.description}>
+            {description}
+          </Text>
+        ) : null}
 
         <View style={styles.actions}>
           <Pressable
@@ -93,25 +96,31 @@ function ShelfItemView({ entry, isPlaying, onPress, onPlay, onLongPress }: Props
             <SymbolView
               name={isPlaying ? 'pause.fill' : 'play.fill'}
               size={12}
-              tintColor={Colors.ground}
+              tintColor="#000000"
               fallback={<Text style={styles.pillIconFallback}>{isPlaying ? '❚❚' : '▶'}</Text>}
             />
             <Text style={styles.pillLabel}>{pillLabel}</Text>
           </Pressable>
           <Pressable
             onPress={onLongPress}
-            hitSlop={10}
+            hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel={`More options for ${entry.title}`}>
             <SymbolView
               name="ellipsis"
               size={17}
-              tintColor={Colors.inactive}
-              fallback={<Text style={{ color: Colors.inactive }}>…</Text>}
+              tintColor={Ink.eyebrow}
+              fallback={<Text style={{ color: Ink.eyebrow }}>…</Text>}
             />
           </Pressable>
         </View>
       </View>
+
+      {started ? (
+        <View style={styles.progress}>
+          <ProgressTrack fraction={fraction} height={3} />
+        </View>
+      ) : null}
     </Pressable>
   );
 }
@@ -119,60 +128,46 @@ function ShelfItemView({ entry, isPlaying, onPress, onPlay, onLongPress }: Props
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     borderRadius: Radius.hero,
-    backgroundColor: Colors.surface,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.stroke,
+    // Nothing flashes white while the artwork decodes.
+    backgroundColor: '#111',
     overflow: 'hidden',
   },
-  imageWrap: {
-    height: IMAGE_HEIGHT,
-    // A dark ground behind the cover, so nothing ever flashes white under it.
-    backgroundColor: '#111',
-  },
-  imageTitle: {
+  content: {
     position: 'absolute',
-    left: Space.ms,
-    right: Space.ms,
-    bottom: Space.m,
-    fontFamily: Fonts.serif,
-    fontSize: 24,
-    lineHeight: 30,
-    color: 'rgba(255,255,255,0.97)',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: Space.ms,
+    gap: 3,
   },
-  progress: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-  body: { padding: Space.ms, gap: 3 },
-  eyebrow: { fontFamily: Fonts.sans, fontSize: 12, color: Colors.inactive },
+  eyebrow: { fontFamily: Fonts.sans, fontSize: 12, color: Ink.eyebrow },
   title: {
-    fontFamily: Fonts.sans,
-    fontSize: 17,
-    fontWeight: '700',
-    lineHeight: 22,
-    color: Colors.primary,
+    fontFamily: Fonts.serif,
+    fontSize: 22,
+    lineHeight: 27,
+    color: Ink.title,
   },
-  description: {
-    fontFamily: Fonts.sans,
-    fontSize: 13,
-    lineHeight: 18,
-    color: Colors.secondary,
-  },
+  description: { fontFamily: Fonts.sans, fontSize: 13, lineHeight: 18, color: Ink.body },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: Space.s,
+    marginTop: Space.m,
   },
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: Colors.primary,
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 999,
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
-  pillLabel: { fontFamily: Fonts.sans, fontSize: 13, fontWeight: '600', color: Colors.ground },
-  pillIconFallback: { color: Colors.ground, fontSize: 11 },
+  pillLabel: { fontFamily: Fonts.sans, fontSize: 13, fontWeight: '600', color: '#000000' },
+  pillIconFallback: { color: '#000000', fontSize: 11 },
+  progress: { position: 'absolute', left: 0, right: 0, bottom: 0 },
 });
 
 export const ShelfItem = memo(ShelfItemView);
