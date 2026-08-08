@@ -1,16 +1,12 @@
-import { Asset } from 'expo-asset';
-
 import { CATALOG, catalogBook, SHELVES, type CatalogBook, type Shelf } from '@/lib/catalog';
 import { type ReadingRow } from '@/db';
 
 /**
- * The bundled library, and how it meets what is already in the database.
+ * The shelves: the bundled catalogue, plus whatever the reader imported.
  *
- * The 50 books ship as Metro assets rather than as rows: seeding 22 MB of text
- * into SQLite on first launch would cost several seconds before anyone sees a
- * shelf. A book becomes a `readings` row the moment it is first opened, and
- * from then on it is an ordinary reading — same progress, same resume, same
- * player. Everything on this screen before that point comes from the catalogue.
+ * Books ship as Metro assets and are read straight off the bundle, so nothing
+ * here is backed by a database row. Imports arrive as synthetic rows so they
+ * can be shelved beside the bundled books without a second code path.
  */
 
 /** One book on a shelf, whether or not it has ever been opened. */
@@ -88,11 +84,11 @@ export function buildLibrary(rows: ReadingRow[]): Library {
     // nothing is lost by dropping it.
   })).filter((shelf) => shelf.items.length > 1);
 
-  // Imports come first: they are the only thing here the reader chose.
+  // The reader's own books come first: they are the only thing here they chose.
   if (imported.length > 0) {
     shelves.unshift({
       id: 'imports',
-      title: 'Your files',
+      title: 'Your collection',
       items: imported.map(fromImport),
     });
   }
@@ -106,29 +102,6 @@ export function buildLibrary(rows: ReadingRow[]): Library {
 
   return { continuing, shelves };
 }
-
-/**
- * Reads a bundled book off disk. In development the asset lives on the Metro
- * server until `downloadAsync` caches it; in a release build it is already in
- * the app bundle and `localUri` is set from the start.
- */
-
-/** A file:// path to a bundled cover — what the native reader needs to tint the page. */
-export async function loadCoverUri(book: CatalogBook): Promise<string | null> {
-  if (book.cover == null) return null;
-  try {
-    const asset = Asset.fromModule(book.cover);
-    if (!asset.localUri) await asset.downloadAsync();
-    return asset.localUri ?? null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * The row id and text for a bundled book, creating the row on first open. This
- * is the only place a catalogue entry turns into a reading.
- */
 
 export function progressFraction(entry: LibraryEntry): number {
   if (entry.charCount <= 0) return 0;

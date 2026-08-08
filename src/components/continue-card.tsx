@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-na
 import { ProgressTrack } from '@/components/progress-track';
 import { progressFraction, type LibraryEntry } from '@/lib/library';
 import { percentLabel, remainingLabel } from '@/lib/text';
-import { coverColors, Fonts, Radius, Screen, Space } from '@/theme';
+import { coverColors, Fonts, Screen, Space } from '@/theme';
 
 type Props = {
   entry: LibraryEntry;

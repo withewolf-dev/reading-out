@@ -16,12 +16,6 @@ export type ReadingRow = {
   catalog_id: string | null;
 };
 
-export type NewReading = {
-  title: string;
-  text: string;
-  coverPath?: string | null;
-  catalogId?: string | null;
-};
 
 const DATABASE_VERSION = 2;
 
@@ -79,27 +73,14 @@ export function listReadings(db: SQLiteDatabase) {
   );
 }
 
-export function getReading(db: SQLiteDatabase, id: number) {
-  return db.getFirstAsync<ReadingRow>(`SELECT ${LIST_COLUMNS} FROM readings WHERE id = ?`, id);
-}
-
-
-export function getReadingByCatalogId(db: SQLiteDatabase, catalogId: string) {
-  return db.getFirstAsync<ReadingRow>(
-    `SELECT ${LIST_COLUMNS} FROM readings WHERE catalog_id = ?`,
-    catalogId
-  );
-}
 
 
 
 
 
 
-export async function getSettings(db: SQLiteDatabase): Promise<Record<string, string>> {
-  const rows = await db.getAllAsync<{ key: string; value: string }>('SELECT key, value FROM settings');
-  return Object.fromEntries(rows.map((r) => [r.key, r.value]));
-}
+
+
 
 export function putSetting(db: SQLiteDatabase, key: string, value: string) {
   return db.runAsync(

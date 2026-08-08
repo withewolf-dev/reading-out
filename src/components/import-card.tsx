@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Radius, Screen, Space } from '@/theme';
+import { Screen, Space } from '@/theme';
 
 type Props = {
   onImport: () => void;

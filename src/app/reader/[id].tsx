@@ -2,10 +2,10 @@ import { Asset } from 'expo-asset';
 import { File } from 'expo-file-system';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { SymbolView } from 'expo-symbols';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,7 +14,7 @@ import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
 import { putSetting } from '@/db';
 import { CATALOG, catalogBook } from '@/lib/catalog';
-import { mark } from '@/lib/perf'; // TEMPORARY instrumentation
+import { takeStagedText } from '@/lib/import';
 import { player, prefs, RATE, usePlayer, usePrefs } from '@/speech/engine';
 import { Colors, coverHue, Fonts, Radius, Screen, Space, tintedSurface } from '@/theme';
 
@@ -36,9 +36,13 @@ export default function ReaderScreen() {
     cover?: string;
     text?: string;
     bodyOffset?: string;
+    /** file:// path to an imported book's text; absent for bundled ones. */
+    textUri?: string;
+    coverUri?: string;
   }>();
 
   const db = useSQLiteContext();
+  const router = useRouter();
   const state = usePlayer();
   const { fontSize, rate } = usePrefs();
   const insets = useSafeAreaInsets();
@@ -53,37 +57,52 @@ export default function ReaderScreen() {
 
   // The engine is keyed by number. With no rows any more, a book's position in
   // the catalogue is the stable id — good for a session, not across launches.
-  const readingId = CATALOG.findIndex((b) => b.id === params.id) + 1;
+  // Bundled books key off catalogue position; an import has none, so it gets a
+  // slot above the catalogue instead.
+  const readingId =
+    book != null ? CATALOG.indexOf(book) + 1 : CATALOG.length + 1;
 
   const [text, setText] = useState<string | null>(null);
   const [coverUri, setCoverUri] = useState<string | null>(null);
   const [tint, setTint] = useState({ hue: 210, saturation: 0.1 });
   const [failed, setFailed] = useState(false);
 
-  const logged = useRef(false);
-  if (!logged.current) {
-    logged.current = true;
-    mark(`reader first render (${params.id})`); // TEMPORARY instrumentation
-  }
-
   useEffect(() => {
-    if (textAsset == null || !Number.isFinite(textAsset)) return;
     let cancelled = false;
+
+    // A book imported a moment ago is already in memory: the extractor handed
+    // back the whole text, so opening it costs nothing at all. Writing it out
+    // and reading it straight back would be the same wasted round trip that
+    // made opening a bundled book slow.
+    const stagedText = params.textUri ? takeStagedText(params.id) : null;
+    if (stagedText != null) {
+      if (params.coverUri) setCoverUri(params.coverUri);
+      setText(stagedText);
+      return;
+    }
 
     (async () => {
       try {
-        if (cover != null && Number.isFinite(cover)) {
+        if (params.coverUri) {
+          if (!cancelled) setCoverUri(params.coverUri);
+        } else if (cover != null && Number.isFinite(cover)) {
           const art = Asset.fromModule(cover);
           if (!art.localUri) await art.downloadAsync();
           if (!cancelled) setCoverUri(art.localUri ?? art.uri);
         }
 
-        const asset = Asset.fromModule(textAsset);
-        if (!asset.localUri) await asset.downloadAsync();
-        const body = await new File(asset.localUri ?? asset.uri).text();
+        // An imported book lives on disk; a bundled one is a Metro asset.
+        let uri = params.textUri ?? null;
+        if (uri == null) {
+          if (textAsset == null || !Number.isFinite(textAsset)) return;
+          const asset = Asset.fromModule(textAsset);
+          if (!asset.localUri) await asset.downloadAsync();
+          uri = asset.localUri ?? asset.uri;
+        }
+
+        const body = await new File(uri).text();
         if (cancelled) return;
 
-        mark(`text loaded (${body.length} chars)`); // TEMPORARY instrumentation
         setText(body);
       } catch {
         if (!cancelled) setFailed(true);
@@ -93,7 +112,7 @@ export default function ReaderScreen() {
     return () => {
       cancelled = true;
     };
-  }, [cover, textAsset]);
+  }, [cover, params.coverUri, params.id, params.textUri, textAsset]);
 
   const isCurrent = state.readingId === readingId;
   const playing = isCurrent && state.status === 'speaking';
@@ -133,7 +152,7 @@ export default function ReaderScreen() {
 
   // Nothing is persisted any more, so position comes from the engine alone.
   const offset = isCurrent ? state.offset : 0;
-  const total = book?.charCount ?? 0;
+  const total = book?.charCount ?? text?.length ?? 0;
   const fraction = total > 0 ? Math.min(1, offset / total) : 0;
   // ~18 UTF-16 units/sec at 1× (§19.1) — elapsed and remaining as clock time.
   const unitsPerSecond = 18 * multiplier;
@@ -149,7 +168,9 @@ export default function ReaderScreen() {
     return (
       <View style={[styles.screen, { backgroundColor: pageTop }]}>
         <View style={styles.opening}>
-          {cover != null && Number.isFinite(cover) ? (
+          {params.coverUri ? (
+            <Image source={{ uri: params.coverUri }} style={styles.openingCover} contentFit="cover" />
+          ) : cover != null && Number.isFinite(cover) ? (
             <Image source={cover} style={styles.openingCover} contentFit="cover" />
           ) : (
             <View style={[styles.openingCover, styles.coverEmpty]} />
@@ -187,7 +208,12 @@ export default function ReaderScreen() {
       {/* Artwork, title and source sit over the page, with the text dissolving
           underneath — Apple's transcript header (§15). */}
       <View style={[styles.header, { paddingTop: insets.top + 60 }]} pointerEvents="none">
-        <ReadingArtwork title={title} coverPath={cover} width={54} radius={Radius.thumbSmall} />
+        <ReadingArtwork
+          title={title}
+          coverPath={params.coverUri ?? cover}
+          width={54}
+          radius={Radius.thumbSmall}
+        />
         <View style={styles.headerText}>
           <Text numberOfLines={2} style={styles.headerTitle}>
             {title}
@@ -227,8 +253,12 @@ export default function ReaderScreen() {
             />
           </Pressable>
           <ControlButton symbol="goforward.30" size={34} label="Forward 30 seconds" onPress={() => player.skip(30)} />
-          {/* The Voice & Text sheet is gone with the settings screen. */}
-          <View style={styles.controlSpacer} />
+          <ControlButton
+            symbol="waveform"
+            size={26}
+            label="Voice and text"
+            onPress={() => router.push('/settings')}
+          />
         </View>
       </View>
     </View>
@@ -323,7 +353,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 28,
   },
-  controlSpacer: { width: 26 },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between' },
   progressLabel: { fontFamily: Fonts.sans, fontSize: 14, color: Colors.inactive },
   speed: { fontFamily: Fonts.sans, fontSize: 17, color: Colors.secondary, minWidth: 42, textAlign: 'center' },

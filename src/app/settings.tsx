@@ -2,12 +2,12 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { SymbolView } from 'expo-symbols';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import type { SpeechVoice } from '../../modules/speech-engine/src/SpeechEngine.types';
 import { putSetting } from '@/db';
-import { prefs, previewVoice, RATE, usePrefs, type Prefs } from '@/speech/engine';
+import { listVoices, prefs, previewVoice, RATE, usePrefs, type Prefs } from '@/speech/engine';
 import { Colors, Fonts, Radius, Reader, Screen, Space } from '@/theme';
 
 const SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
@@ -17,10 +17,11 @@ export default function SettingsScreen() {
   const db = useSQLiteContext();
   const router = useRouter();
   const current = usePrefs();
-  // Fetching the installed voices needed an effect, and there are no effects
-  // left in this app, so the list stays empty. Rate, pitch and font size are
-  // unaffected.
-  const voices: SpeechVoice[] = [];
+  const [voices, setVoices] = useState<SpeechVoice[]>([]);
+
+  useEffect(() => {
+    listVoices().then(setVoices).catch(() => setVoices([]));
+  }, []);
 
   function update(next: Partial<Prefs>) {
     prefs.set(next);

@@ -49,3 +49,6 @@ example
 # The cleaned book.txt is what ships and what is committed.
 content/books/*/source.txt
 content/books/*/gutendex.json
+
+# Scratch copies of src/ made while stripping the app down.
+.backup/
