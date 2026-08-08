@@ -1,98 +1,308 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
+import { Stack, useFocusEffect, useRouter } from 'expo-router';
+import { SymbolView } from 'expo-symbols';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useCallback, useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { ContinueCard } from '@/components/continue-card';
+import { MiniPlayer } from '@/components/mini-player';
+import { ShelfItem } from '@/components/shelf-item';
+import {
+  deleteReading,
+  getReadingText,
+  insertReading,
+  listReadings,
+  progressFraction,
+  touchOpened,
+  type ReadingRow,
+} from '@/db';
+import { pickAndReadDocuments } from '@/lib/import';
+import { SAMPLE_TEXT, SAMPLE_TITLE } from '@/lib/sample';
+import { countWords, makeSnippet } from '@/lib/text';
+import { player, RATE, usePlayer, usePrefs } from '@/speech/engine';
+import { Colors, Fonts, Radius, Screen, Space } from '@/theme';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function LibraryScreen() {
+  const db = useSQLiteContext();
+  const router = useRouter();
+  const state = usePlayer();
+  const { rate } = usePrefs();
+  const [readings, setReadings] = useState<ReadingRow[] | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const reload = useCallback(() => {
+    listReadings(db).then(setReadings).catch(() => setReadings([]));
+  }, [db]);
+
+  useFocusEffect(reload);
+
+  const open = useCallback(
+    (id: number) => {
+      touchOpened(db, id).catch(() => {});
+      router.push(`/reader/${id}`);
+    },
+    [db, router]
+  );
+
+  const save = useCallback(
+    async (title: string, text: string, coverPath?: string | null) => {
+      const id = await insertReading(
+        db,
+        { title, text, coverPath },
+        { charCount: text.length, wordCount: countWords(text), snippet: makeSnippet(text) }
+      );
+      reload();
+      return id;
+    },
+    [db, reload]
+  );
+
+  const importFiles = useCallback(async () => {
+    const result = await pickAndReadDocuments(() => setBusy('Reading the file…'));
+    if (!result) {
+      setBusy(null);
+      return;
+    }
+    try {
+      for (const doc of result.imported) await save(doc.title, doc.text, doc.coverPath);
+      if (result.failed.length > 0) {
+        Alert.alert(
+          result.imported.length > 0 ? 'Some files could not be imported' : "That file can't be read",
+          result.failed.map((f) => `${f.name}\n${f.reason}`).join('\n\n')
+        );
+      }
+    } finally {
+      setBusy(null);
+    }
+  }, [save]);
+
+  const playReading = useCallback(
+    async (reading: ReadingRow) => {
+      if (player.isLoaded(reading.id)) {
+        player.toggle();
+        return;
+      }
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      const text = await getReadingText(db, reading.id);
+      const done = reading.finished_at != null || progressFraction(reading) >= 1;
+      player.play({ id: reading.id, title: reading.title, text }, done ? 0 : reading.progress_offset);
+      touchOpened(db, reading.id).catch(() => {});
+      reload();
+    },
+    [db, reload]
+  );
+
+  const confirmDelete = useCallback(
+    (reading: ReadingRow) => {
+      Alert.alert(reading.title, 'Delete this reading?', [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            if (player.isLoaded(reading.id)) player.stop();
+            await deleteReading(db, reading.id);
+            reload();
+          },
+        },
+      ]);
+    },
+    [db, reload]
+  );
+
+  const hero = readings?.find((r) => r.finished_at == null) ?? readings?.[0] ?? null;
+  const shelf = readings?.filter((r) => r.id !== hero?.id) ?? [];
+  const nowPlaying = readings?.find((r) => r.id === state.readingId);
+  // `rate` is AVFoundation's own 0…1 scale, so normalise it before turning
+  // words into minutes.
+  const wordsPerMinute = 180 * (rate / RATE.default);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <View style={styles.screen}>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <View style={styles.headerButtons}>
+              <HeaderIcon
+                symbol="plus"
+                label="Import a file"
+                onPress={importFiles}
+                onLongPress={() => router.push('/composer')}
+              />
+              <HeaderIcon symbol="gearshape" label="Voice and text settings" onPress={() => router.push('/settings')} />
+            </View>
+          ),
+        }}
+      />
+
+      {readings == null ? null : readings.length === 0 ? (
+        <EmptyLibrary
+          onImport={importFiles}
+          onPaste={() => router.push('/composer')}
+          onSample={async () => {
+            const id = await save(SAMPLE_TITLE, SAMPLE_TEXT);
+            open(id);
+          }}
+        />
+      ) : (
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}>
+          {hero ? (
+            <ContinueCard
+              reading={hero}
+              isPlaying={state.readingId === hero.id && state.status === 'speaking'}
+              wordsPerMinute={wordsPerMinute}
+              onOpen={() => open(hero.id)}
+              onTogglePlay={() => playReading(hero)}
+              onLongPress={() => confirmDelete(hero)}
+            />
+          ) : null}
+
+          {shelf.length > 0 ? (
+            <View style={styles.shelfSection}>
+              <Text style={styles.sectionTitle}>Everything else</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.shelf}>
+                {shelf.map((reading) => (
+                  <ShelfItem
+                    key={reading.id}
+                    reading={reading}
+                    onPress={() => open(reading.id)}
+                    onLongPress={() => confirmDelete(reading)}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          ) : null}
+        </ScrollView>
+      )}
+
+      {busy ? (
+        <View style={styles.busy}>
+          <Text style={styles.busyText}>{busy}</Text>
+        </View>
+      ) : null}
+
+      <MiniPlayer
+        onOpen={open}
+        coverPath={nowPlaying?.cover_path}
+        wordCount={nowPlaying?.word_count}
+      />
+    </View>
   );
 }
 
-export default function HomeScreen() {
+function HeaderIcon({
+  symbol,
+  label,
+  onPress,
+  onLongPress,
+}: {
+  symbol: string;
+  label: string;
+  onPress: () => void;
+  onLongPress?: () => void;
+}) {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <Pressable hitSlop={10} onPress={onPress} onLongPress={onLongPress} accessibilityRole="button" accessibilityLabel={label}>
+      <SymbolView name={symbol as never} size={20} tintColor={Colors.accent} fallback={<Text style={{ color: Colors.accent }}>{label}</Text>} />
+    </Pressable>
+  );
+}
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+/** The empty state IS the onboarding: it teaches, motivates, and guides (§8). */
+function EmptyLibrary({
+  onImport,
+  onPaste,
+  onSample,
+}: {
+  onImport: () => void;
+  onPaste: () => void;
+  onSample: () => void;
+}) {
+  return (
+    <View style={styles.empty}>
+      <Text style={styles.emptyTitle}>Nothing here yet.</Text>
+      <Text style={styles.emptyBody}>
+        Bring in a document and ReadingLoud reads it aloud — highlighting each word as it goes.
+        Everything stays on this device.
+      </Text>
+      <View style={styles.doors}>
+        <Door label="Import a file" primary onPress={onImport} />
+        <Door label="Paste text" onPress={onPaste} />
+        <Door label="Try a sample" onPress={onSample} />
+      </View>
+    </View>
+  );
+}
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+function Door({ label, onPress, primary }: { label: string; onPress: () => void; primary?: boolean }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      style={({ pressed }) => [
+        styles.door,
+        primary && styles.doorPrimary,
+        pressed && { opacity: 0.6 },
+      ]}>
+      <Text style={[styles.doorLabel, primary && styles.doorLabelPrimary]}>{label}</Text>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+  screen: { flex: 1, backgroundColor: Colors.ground },
+  content: { paddingTop: Space.s, paddingBottom: 120, gap: Space.xl },
+  headerButtons: { flexDirection: 'row', gap: Space.xl, alignItems: 'center' },
+  sectionTitle: {
+    fontFamily: Fonts.sans,
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.inactive,
+    marginHorizontal: Screen.margin,
+    marginBottom: Space.m,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
+  shelfSection: { gap: 0 },
+  shelf: { paddingHorizontal: Screen.margin, gap: Space.l },
+  empty: { flex: 1, justifyContent: 'center', paddingHorizontal: Screen.margin, gap: Space.m },
+  emptyTitle: { fontFamily: Fonts.serif, fontSize: 28, color: Colors.primary },
+  emptyBody: { fontFamily: Fonts.sans, fontSize: 15, lineHeight: 22, color: Colors.inactive },
+  doors: { marginTop: Space.l, gap: Space.m },
+  door: {
+    paddingVertical: Space.ms,
+    borderRadius: Radius.card,
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.stroke,
+    backgroundColor: 'rgba(255,255,255,0.06)',
   },
-  heroSection: {
+  doorPrimary: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  doorLabel: { fontFamily: Fonts.sans, fontSize: 16, color: Colors.primary },
+  doorLabelPrimary: { color: Colors.ground, fontWeight: '600' },
+  busy: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  busyText: {
+    fontFamily: Fonts.sans,
+    fontSize: 15,
+    color: Colors.primary,
+    backgroundColor: 'rgba(40,40,42,0.98)',
+    paddingHorizontal: Space.xl,
+    paddingVertical: Space.l,
+    borderRadius: Radius.card,
+    overflow: 'hidden',
   },
 });

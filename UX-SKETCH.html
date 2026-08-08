@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ReadingLoud — UX sketch</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#f4f4f2;}
+  svg{display:block;width:100%;height:auto;
+      background-color:#f4f4f2;
+      background-image:radial-gradient(#d2d2cd 1.4px, transparent 1.4px);
+      background-size:24px 24px;}
+  text{font-family:"Caveat","Bradley Hand","Marker Felt","Segoe Print",cursive;
+       fill:#4a4a4a;font-size:19px;}
+  .n{font-size:23px;fill:#333;font-weight:600}
+  .s{font-size:16px;fill:#6b6b6b}
+  .xs{font-size:14px;fill:#8a8a8a}
+  .lab{font-size:19px;fill:#5a5a5a}
+  .f{fill:#fff;stroke:#666;stroke-width:3.5}
+  .thin{fill:none;stroke:#a6a6a6;stroke-width:2.4;stroke-linecap:round}
+  .grey{fill:#e9e9e6;stroke:#b0b0b0;stroke-width:2}
+  .dark{fill:#565656;stroke:none}
+  .arr{fill:none;stroke:#6b6b6b;stroke-width:3.6;stroke-linecap:round;marker-end:url(#tip)}
+  .dash{stroke-dasharray:10 9}
+  .wob{filter:url(#wob)}
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1240 1740" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="wob" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="tip" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L10 6 L1 11" fill="none" stroke="#6b6b6b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="80" y="62" style="font-size:34px;fill:#333;font-weight:600">ReadingLoud — what happens, frame by frame</text>
+  <text x="80" y="92" class="s">no login · no onboarding · works in airplane mode</text>
+
+  <!-- ============ ROW 1 ============ -->
+
+  <!-- 1. LAUNCH -->
+  <text x="80" y="164" class="n">1. tap the icon</text>
+  <rect class="f wob" x="80" y="180" width="260" height="400" rx="16"/>
+  <rect class="thin wob" x="112" y="300" width="196" height="150" rx="12" stroke-dasharray="8 8"/>
+  <text x="210" y="345" class="lab" text-anchor="middle">no splash</text>
+  <text x="210" y="375" class="lab" text-anchor="middle">no login</text>
+  <text x="210" y="405" class="lab" text-anchor="middle">no onboarding</text>
+  <text x="210" y="435" class="xs" text-anchor="middle">straight into the app</text>
+
+  <path class="arr wob" d="M356 380 C 400 380, 415 340, 455 342"/>
+  <text x="360" y="332" class="lab">opens</text>
+
+  <!-- 2. EMPTY LIBRARY -->
+  <text x="470" y="164" class="n">2. empty library</text>
+  <rect class="f wob" x="470" y="180" width="260" height="400" rx="16"/>
+  <text x="492" y="222" class="lab">Library</text>
+  <circle class="thin wob" cx="706" cy="214" r="13"/>
+  <text x="706" y="221" class="s" text-anchor="middle">+</text>
+  <text x="600" y="290" class="lab" text-anchor="middle">nothing here yet.</text>
+  <text x="600" y="316" class="xs" text-anchor="middle">3 doors — this IS the onboarding</text>
+  <rect class="grey wob" x="510" y="340" width="180" height="44" rx="22"/>
+  <text x="600" y="368" class="lab" text-anchor="middle">Import a file</text>
+  <rect class="thin wob" x="510" y="398" width="180" height="44" rx="22"/>
+  <text x="600" y="426" class="lab" text-anchor="middle">Paste text</text>
+  <rect class="thin wob" x="510" y="456" width="180" height="44" rx="22"/>
+  <text x="600" y="484" class="lab" text-anchor="middle">Try a sample</text>
+  <text x="600" y="532" class="xs" text-anchor="middle">no tab bar. ever.</text>
+
+  <path class="arr wob" d="M746 380 C 790 380, 805 340, 845 342"/>
+  <text x="750" y="332" class="lab">tap Import</text>
+
+  <!-- 3. FILE PICKER -->
+  <text x="860" y="164" class="n">3. files (system)</text>
+  <rect class="f wob" x="860" y="180" width="260" height="400" rx="16"/>
+  <text x="990" y="228" class="xs" text-anchor="middle">not our screen — iOS gives it</text>
+  <rect class="grey wob" x="860" y="250" width="260" height="330" rx="16"/>
+  <line class="thin" x1="965" y1="270" x2="1015" y2="270"/>
+  <rect class="thin wob" x="884" y="296" width="212" height="46" rx="8"/>
+  <text x="900" y="325" class="lab">book.pdf</text>
+  <rect class="thin wob" x="884" y="356" width="212" height="46" rx="8"/>
+  <text x="900" y="385" class="lab">notes.txt</text>
+  <rect class="thin wob" x="884" y="416" width="212" height="46" rx="8"/>
+  <text x="900" y="445" class="lab">paper.pdf</text>
+  <text x="990" y="500" class="xs" text-anchor="middle">pick one, or many at once</text>
+
+  <path class="arr wob" d="M1150 380 C 1195 400, 1195 560, 1150 640"/>
+  <text x="1160" y="500" class="lab">picked</text>
+
+  <!-- ============ ROW 2 (right → left) ============ -->
+
+  <!-- 4. IMPORTING -->
+  <text x="860" y="684" class="n">4. reading the file</text>
+  <rect class="f wob" x="860" y="700" width="260" height="400" rx="16"/>
+  <rect class="thin wob" x="890" y="830" width="200" height="140" rx="12"/>
+  <text x="990" y="872" class="lab" text-anchor="middle">pulling out the text…</text>
+  <rect class="grey wob" x="910" y="892" width="160" height="10" rx="5"/>
+  <rect class="dark wob" x="910" y="892" width="104" height="10" rx="5"/>
+  <text x="990" y="936" class="xs" text-anchor="middle">613 pages ≈ 1 second</text>
+  <text x="990" y="1012" class="xs" text-anchor="middle">scanned pdf? → "needs OCR",</text>
+  <text x="990" y="1032" class="xs" text-anchor="middle">we say so instead of importing silence</text>
+
+  <path class="arr wob" d="M836 900 C 795 900, 780 860, 742 862"/>
+  <text x="770" y="852" class="lab" text-anchor="middle">done</text>
+
+  <!-- 5. LIBRARY WITH A BOOK -->
+  <text x="470" y="684" class="n">5. library (the home)</text>
+  <rect class="f wob" x="470" y="700" width="260" height="400" rx="16"/>
+  <text x="492" y="742" class="lab">Library</text>
+  <circle class="thin wob" cx="706" cy="734" r="13"/>
+  <text x="706" y="741" class="s" text-anchor="middle">+</text>
+  <!-- hero card -->
+  <rect class="thin wob" x="492" y="760" width="216" height="96" rx="12"/>
+  <rect class="grey wob" x="504" y="772" width="52" height="72" rx="6"/>
+  <text x="568" y="796" class="lab">Continue</text>
+  <text x="568" y="820" class="xs">18h 32m left · 12%</text>
+  <circle class="dark wob" cx="682" cy="808" r="16"/>
+  <path d="M677 801 L690 808 L677 815 Z" fill="#fff"/>
+  <text x="600" y="884" class="xs" text-anchor="middle">↑ two taps from lock screen to sound</text>
+  <!-- shelf -->
+  <rect class="grey wob" x="492" y="900" width="62" height="88" rx="8"/>
+  <rect class="grey wob" x="566" y="900" width="62" height="88" rx="8"/>
+  <rect class="grey wob" x="640" y="900" width="62" height="88" rx="8"/>
+  <text x="600" y="1010" class="xs" text-anchor="middle">long-press a cover → Delete</text>
+  <!-- mini player -->
+  <rect class="thin wob" x="486" y="1030" width="228" height="50" rx="18"/>
+  <rect class="grey wob" x="498" y="1040" width="30" height="30" rx="5"/>
+  <text x="540" y="1060" class="s">The Book · playing</text>
+  <path d="M690 1046 L690 1064 M700 1046 L700 1064" stroke="#565656" stroke-width="4" stroke-linecap="round"/>
+
+  <path class="arr wob" d="M446 900 C 405 900, 390 860, 352 862"/>
+  <text x="398" y="836" class="lab" text-anchor="middle">tap it</text>
+
+  <!-- 6. READER -->
+  <text x="80" y="684" class="n">6. reader — the whole point</text>
+  <rect class="f wob" x="80" y="700" width="260" height="400" rx="16"/>
+  <text x="102" y="742" class="xs">‹ back</text>
+  <line class="thin" x1="102" y1="776" x2="318" y2="776"/>
+  <line class="thin" x1="102" y1="800" x2="300" y2="800"/>
+  <line class="thin" x1="102" y1="824" x2="312" y2="824"/>
+  <rect class="grey wob" x="150" y="840" width="70" height="20" rx="4"/>
+  <line class="thin" x1="102" y1="850" x2="144" y2="850"/>
+  <line class="thin" x1="226" y1="850" x2="318" y2="850"/>
+  <text x="210" y="886" class="xs" text-anchor="middle">↑ the word being said, lit up</text>
+  <line class="thin" x1="102" y1="906" x2="306" y2="906" stroke="#cfcfcf"/>
+  <line class="thin" x1="102" y1="930" x2="318" y2="930" stroke="#cfcfcf"/>
+  <line class="thin" x1="102" y1="954" x2="290" y2="954" stroke="#cfcfcf"/>
+  <text x="210" y="990" class="xs" text-anchor="middle">tap any paragraph → starts there</text>
+  <rect class="thin wob" x="96" y="1020" width="228" height="52" rx="26"/>
+  <text x="210" y="1052" class="lab" text-anchor="middle">−15   ▶   +30   1.5×   voice</text>
+
+  <path class="arr wob" d="M210 1122 C 210 1160, 210 1180, 210 1216"/>
+  <text x="228" y="1176" class="lab">lock the phone</text>
+
+  <path class="arr dash wob" d="M348 1010 C 430 1050, 470 1120, 520 1200"/>
+  <text x="392" y="1092" class="lab">gear</text>
+
+  <path class="arr dash wob" d="M736 1010 C 820 1050, 850 1120, 900 1200"/>
+  <text x="782" y="1092" class="lab">＋ · paste / type</text>
+
+  <!-- ============ ROW 3 ============ -->
+
+  <!-- 7. LOCK SCREEN -->
+  <text x="80" y="1264" class="n">7. lock screen</text>
+  <rect class="f wob" x="80" y="1280" width="260" height="400" rx="16"/>
+  <text x="210" y="1340" class="n" text-anchor="middle">9:41</text>
+  <rect class="grey wob" x="160" y="1370" width="100" height="100" rx="8"/>
+  <text x="210" y="1502" class="lab" text-anchor="middle">The Book</text>
+  <text x="210" y="1526" class="xs" text-anchor="middle">3h 43m left · 12%</text>
+  <text x="210" y="1576" class="n" text-anchor="middle">◀◀   ❚❚   ▶▶</text>
+  <text x="210" y="1624" class="xs" text-anchor="middle">audio keeps going. a call pauses it,</text>
+  <text x="210" y="1644" class="xs" text-anchor="middle">then it picks up again by itself.</text>
+
+  <!-- 8. SETTINGS -->
+  <text x="470" y="1264" class="n">8. voice &amp; text (sheet)</text>
+  <rect class="f wob" x="470" y="1280" width="260" height="400" rx="16"/>
+  <text x="600" y="1318" class="xs" text-anchor="middle">slides up · swipe down to close</text>
+  <line class="thin" x1="576" y1="1298" x2="624" y2="1298"/>
+  <rect class="thin wob" x="492" y="1340" width="216" height="46" rx="8"/>
+  <text x="508" y="1369" class="lab">Voice</text><text x="690" y="1369" class="s" text-anchor="end">Samantha ›</text>
+  <rect class="thin wob" x="492" y="1400" width="216" height="46" rx="8"/>
+  <text x="508" y="1429" class="lab">Speed</text><text x="690" y="1429" class="s" text-anchor="end">1.5× </text>
+  <rect class="thin wob" x="492" y="1460" width="216" height="46" rx="8"/>
+  <text x="508" y="1489" class="lab">Text size</text><text x="690" y="1489" class="s" text-anchor="end">19pt </text>
+  <rect class="thin wob" x="492" y="1520" width="216" height="46" rx="8"/>
+  <text x="508" y="1549" class="lab">About</text><text x="690" y="1549" class="s" text-anchor="end">v1.0 ›</text>
+  <text x="600" y="1610" class="xs" text-anchor="middle">nothing else lives here.</text>
+  <text x="600" y="1630" class="xs" text-anchor="middle">no account. no subscription rows.</text>
+
+  <!-- 9. COMPOSER -->
+  <text x="860" y="1264" class="n">9. paste / type (sheet)</text>
+  <rect class="f wob" x="860" y="1280" width="260" height="400" rx="16"/>
+  <line class="thin" x1="966" y1="1298" x2="1014" y2="1298"/>
+  <text x="884" y="1338" class="xs">Cancel</text>
+  <text x="1096" y="1338" class="xs" text-anchor="end">Save</text>
+  <rect class="thin wob" x="884" y="1358" width="212" height="200" rx="10"/>
+  <text x="990" y="1450" class="lab" text-anchor="middle">paste anything here</text>
+  <text x="990" y="1478" class="xs" text-anchor="middle">the title is guessed from line 1</text>
+  <text x="990" y="1610" class="xs" text-anchor="middle">Save → it shows up in the library,</text>
+  <text x="990" y="1630" class="xs" text-anchor="middle">ready to play.</text>
+
+  <path class="arr dash wob" d="M876 1420 C 800 1420, 770 1300, 748 1130"/>
+  <text x="768" y="1400" class="lab">back to 5</text>
+
+</svg>
+</body>
+</html>
