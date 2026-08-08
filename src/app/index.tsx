@@ -22,7 +22,13 @@ export default function LibraryScreen() {
           style={styles.row}
           onPress={() => {
             markStart('tap');
-            router.push(`/reader/${item.id}`);
+            // The cover travels as a route param. `item.cover` is the numeric
+            // Metro asset handle from `require()`; params are serialised, so it
+            // arrives as a string and has to be turned back into a number.
+            router.push({
+              pathname: '/reader/[id]',
+              params: { id: item.id, cover: item.cover == null ? '' : String(item.cover) },
+            });
             mark('push returned');
           }}>
           {item.cover != null ? (

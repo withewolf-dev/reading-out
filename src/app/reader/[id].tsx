@@ -1,8 +1,9 @@
+import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import { useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { sinceStart } from '@/lib/perf';
+import { mark, sinceStart } from '@/lib/perf';
 
 /**
  * STRIPPED FOR MEASUREMENT — every piece of business logic is gone. No SQLite,
@@ -14,7 +15,12 @@ import { sinceStart } from '@/lib/perf';
  * The real screen is preserved at `.backup/reader-id.tsx.bak`.
  */
 export default function ReaderScreen() {
-  const params = useLocalSearchParams<{ id: string }>();
+  const params = useLocalSearchParams<{ id: string; cover?: string }>();
+
+  // Handed over by the library through the route. Params are serialised, so the
+  // asset handle arrives as a string; the asset registry still resolves it once
+  // it is a number again.
+  const cover = params.cover ? Number(params.cover) : null;
 
   // Captured during the very first render, before React has committed anything.
   // There are no effects left anywhere in the app, so this is the only moment
@@ -22,8 +28,21 @@ export default function ReaderScreen() {
   // `useEffect` and a `requestAnimationFrame` to observe, and both are gone.
   const firstRender = useRef(sinceStart()).current;
 
+  // Emitted to the console, which reaches Metro, so a tap can be read off the
+  // terminal rather than screenshotted.
+  const logged = useRef(false);
+  if (!logged.current) {
+    logged.current = true;
+    mark(`reader first render (cover=${params.cover || 'none'})`);
+  }
+
   return (
     <View style={styles.screen}>
+      {cover != null && Number.isFinite(cover) ? (
+        <Image source={cover} style={styles.cover} contentFit="cover" />
+      ) : (
+        <View style={[styles.cover, styles.coverEmpty]} />
+      )}
       <Text style={styles.book}>{params.id}</Text>
       <Row label="tap → first render" value={firstRender} />
       <Text style={styles.note}>
@@ -45,6 +64,8 @@ function Row({ label, value }: { label: string; value: number | null }) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#FFFFFF', paddingHorizontal: 24, paddingTop: 120 },
+  cover: { width: 160, height: 232, borderRadius: 8, backgroundColor: '#E5E5EA', marginBottom: 28 },
+  coverEmpty: { backgroundColor: '#D1D1D6' },
   book: { fontSize: 15, color: '#8A8A8E', marginBottom: 28 },
   row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
   label: { fontSize: 17, color: '#3A3A3C' },
