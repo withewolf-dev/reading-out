@@ -2,8 +2,8 @@ import * as Haptics from 'expo-haptics';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ContinueCard } from '@/components/continue-card';
@@ -14,15 +14,21 @@ import {
   getReadingText,
   insertReading,
   listReadings,
-  progressFraction,
   touchOpened,
   type ReadingRow,
 } from '@/db';
+import { catalogBook } from '@/lib/catalog';
 import { pickAndReadDocuments } from '@/lib/import';
-import { SAMPLE_TEXT, SAMPLE_TITLE } from '@/lib/sample';
+import {
+  buildLibrary,
+  ensureReading,
+  startOffset,
+  type LibraryEntry,
+  type LibraryShelf,
+} from '@/lib/library';
 import { countWords, makeSnippet } from '@/lib/text';
 import { player, RATE, usePlayer, usePrefs } from '@/speech/engine';
-import { Colors, Fonts, Radius, Screen, Space } from '@/theme';
+import { Colors, Fonts, Screen, Space } from '@/theme';
 
 export default function LibraryScreen() {
   const db = useSQLiteContext();
@@ -39,25 +45,30 @@ export default function LibraryScreen() {
 
   useFocusEffect(reload);
 
-  const open = useCallback(
-    (id: number) => {
+  // The catalogue is static and the rows are few, so the whole shelf layout is
+  // rebuilt only when the readings change.
+  const library = useMemo(() => buildLibrary(readings ?? []), [readings]);
+
+  /** A bundled book becomes a row the first time it is opened. */
+  const openEntry = useCallback(
+    async (entry: LibraryEntry) => {
+      let id = entry.row?.id;
+      if (id == null && entry.book) {
+        setBusy('Opening…');
+        try {
+          id = (await ensureReading(db, entry.book)).id;
+        } catch {
+          setBusy(null);
+          Alert.alert(entry.title, 'That book could not be opened.');
+          return;
+        }
+        setBusy(null);
+      }
+      if (id == null) return;
       touchOpened(db, id).catch(() => {});
       router.push(`/reader/${id}`);
     },
     [db, router]
-  );
-
-  const save = useCallback(
-    async (title: string, text: string, coverPath?: string | null) => {
-      const id = await insertReading(
-        db,
-        { title, text, coverPath },
-        { charCount: text.length, wordCount: countWords(text), snippet: makeSnippet(text) }
-      );
-      reload();
-      return id;
-    },
-    [db, reload]
   );
 
   const importFiles = useCallback(async () => {
@@ -67,7 +78,18 @@ export default function LibraryScreen() {
       return;
     }
     try {
-      for (const doc of result.imported) await save(doc.title, doc.text, doc.coverPath);
+      for (const doc of result.imported) {
+        await insertReading(
+          db,
+          { title: doc.title, text: doc.text, coverPath: doc.coverPath },
+          {
+            charCount: doc.text.length,
+            wordCount: countWords(doc.text),
+            snippet: makeSnippet(doc.text),
+          }
+        );
+      }
+      reload();
       if (result.failed.length > 0) {
         Alert.alert(
           result.imported.length > 0 ? 'Some files could not be imported' : "That file can't be read",
@@ -77,48 +99,89 @@ export default function LibraryScreen() {
     } finally {
       setBusy(null);
     }
-  }, [save]);
+  }, [db, reload]);
 
-  const playReading = useCallback(
-    async (reading: ReadingRow) => {
-      if (player.isLoaded(reading.id)) {
+  const playEntry = useCallback(
+    async (entry: LibraryEntry) => {
+      if (entry.row && player.isLoaded(entry.row.id)) {
         player.toggle();
         return;
       }
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      const text = await getReadingText(db, reading.id);
-      const done = reading.finished_at != null || progressFraction(reading) >= 1;
-      player.play({ id: reading.id, title: reading.title, text }, done ? 0 : reading.progress_offset);
-      touchOpened(db, reading.id).catch(() => {});
+      // Playing a book that has never been opened has to materialise it first —
+      // the same path as opening it, so progress lands in the same row.
+      let loaded: { id: number; text: string };
+      if (entry.row) loaded = { id: entry.row.id, text: await getReadingText(db, entry.row.id) };
+      else if (entry.book) loaded = await ensureReading(db, entry.book);
+      else return;
+
+      player.play({ id: loaded.id, title: entry.title, text: loaded.text }, startOffset(entry));
+      touchOpened(db, loaded.id).catch(() => {});
       reload();
     },
     [db, reload]
   );
 
-  const confirmDelete = useCallback(
-    (reading: ReadingRow) => {
-      Alert.alert(reading.title, 'Delete this reading?', [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            if (player.isLoaded(reading.id)) player.stop();
-            await deleteReading(db, reading.id);
-            reload();
+  /** Long press removes progress, not the book: a bundled book cannot be deleted. */
+  const confirmReset = useCallback(
+    (entry: LibraryEntry) => {
+      if (!entry.row) return;
+      const row = entry.row;
+      const bundled = row.catalog_id != null;
+      Alert.alert(
+        entry.title,
+        bundled ? 'Forget your place in this book?' : 'Delete this reading?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: bundled ? 'Forget' : 'Delete',
+            style: 'destructive',
+            onPress: async () => {
+              if (player.isLoaded(row.id)) player.stop();
+              await deleteReading(db, row.id);
+              reload();
+            },
           },
-        },
-      ]);
+        ]
+      );
     },
     [db, reload]
   );
 
-  const hero = readings?.find((r) => r.finished_at == null) ?? readings?.[0] ?? null;
-  const shelf = readings?.filter((r) => r.id !== hero?.id) ?? [];
-  const nowPlaying = readings?.find((r) => r.id === state.readingId);
+  const nowPlayingRow = readings?.find((r) => r.id === state.readingId);
+  const nowPlayingBook = catalogBook(nowPlayingRow?.catalog_id);
   // `rate` is AVFoundation's own 0…1 scale, so normalise it before turning
   // words into minutes.
   const wordsPerMinute = 180 * (rate / RATE.default);
+
+  const renderShelf = useCallback(
+    ({ item: shelf }: { item: LibraryShelf }) => (
+      <View style={styles.shelfSection}>
+        <Text style={styles.sectionTitle}>{shelf.title}</Text>
+        {shelf.subtitle ? <Text style={styles.sectionSubtitle}>{shelf.subtitle}</Text> : null}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.shelf}>
+          {shelf.items.map((entry) => (
+            <ShelfItem
+              key={entry.key}
+              entry={entry}
+              isPlaying={
+                entry.row != null &&
+                state.readingId === entry.row.id &&
+                state.status === 'speaking'
+              }
+              onPress={() => openEntry(entry)}
+              onPlay={() => playEntry(entry)}
+              onLongPress={() => confirmReset(entry)}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    ),
+    [confirmReset, openEntry, playEntry, state.readingId, state.status]
+  );
 
   return (
     <View style={styles.screen}>
@@ -136,49 +199,38 @@ export default function LibraryScreen() {
         </View>
       </View>
 
-      {readings == null ? null : readings.length === 0 ? (
-        <EmptyLibrary
-          onImport={importFiles}
-          onPaste={() => router.push('/composer')}
-          onSample={async () => {
-            const id = await save(SAMPLE_TITLE, SAMPLE_TEXT);
-            open(id);
-          }}
-        />
-      ) : (
-        <ScrollView
+      {readings == null ? null : (
+        <FlatList
+          data={library.shelves}
+          keyExtractor={(shelf) => shelf.id}
+          renderItem={renderShelf}
           contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}>
-          {hero ? (
-            <ContinueCard
-              reading={hero}
-              isPlaying={state.readingId === hero.id && state.status === 'speaking'}
-              wordsPerMinute={wordsPerMinute}
-              onOpen={() => open(hero.id)}
-              onTogglePlay={() => playReading(hero)}
-              onLongPress={() => confirmDelete(hero)}
-            />
-          ) : null}
-
-          {shelf.length > 0 ? (
-            <View style={styles.shelfSection}>
-              <Text style={styles.sectionTitle}>Everything else</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.shelf}>
-                {shelf.map((reading) => (
-                  <ShelfItem
-                    key={reading.id}
-                    reading={reading}
-                    onPress={() => open(reading.id)}
-                    onLongPress={() => confirmDelete(reading)}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          ) : null}
-        </ScrollView>
+          showsVerticalScrollIndicator={false}
+          // Fifteen shelves of artwork is more than one screen can afford to
+          // decode at once.
+          initialNumToRender={3}
+          maxToRenderPerBatch={3}
+          windowSize={5}
+          ListHeaderComponent={
+            library.continuing ? (
+              <ContinueCard
+                entry={library.continuing}
+                isPlaying={
+                  state.readingId === library.continuing.row?.id && state.status === 'speaking'
+                }
+                wordsPerMinute={wordsPerMinute}
+                onOpen={() => openEntry(library.continuing!)}
+                onTogglePlay={() => playEntry(library.continuing!)}
+                onLongPress={() => confirmReset(library.continuing!)}
+              />
+            ) : (
+              <Text style={styles.intro}>
+                Fifty books, ready to be read aloud. Pick one and press play — ReadingLoud
+                highlights each word as it goes, and remembers where you stopped.
+              </Text>
+            )
+          }
+        />
       )}
 
       {busy ? (
@@ -188,9 +240,9 @@ export default function LibraryScreen() {
       ) : null}
 
       <MiniPlayer
-        onOpen={open}
-        coverPath={nowPlaying?.cover_path}
-        wordCount={nowPlaying?.word_count}
+        onOpen={(id) => router.push(`/reader/${id}`)}
+        coverPath={nowPlayingBook?.cover ?? nowPlayingRow?.cover_path}
+        wordCount={nowPlayingRow?.word_count}
       />
     </View>
   );
@@ -214,47 +266,6 @@ function HeaderIcon({
   );
 }
 
-/** The empty state IS the onboarding: it teaches, motivates, and guides (§8). */
-function EmptyLibrary({
-  onImport,
-  onPaste,
-  onSample,
-}: {
-  onImport: () => void;
-  onPaste: () => void;
-  onSample: () => void;
-}) {
-  return (
-    <View style={styles.empty}>
-      <Text style={styles.emptyTitle}>Nothing here yet.</Text>
-      <Text style={styles.emptyBody}>
-        Bring in a document and ReadingLoud reads it aloud — highlighting each word as it goes.
-        Everything stays on this device.
-      </Text>
-      <View style={styles.doors}>
-        <Door label="Import a file" primary onPress={onImport} />
-        <Door label="Paste text" onPress={onPaste} />
-        <Door label="Try a sample" onPress={onSample} />
-      </View>
-    </View>
-  );
-}
-
-function Door({ label, onPress, primary }: { label: string; onPress: () => void; primary?: boolean }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      style={({ pressed }) => [
-        styles.door,
-        primary && styles.doorPrimary,
-        pressed && { opacity: 0.6 },
-      ]}>
-      <Text style={[styles.doorLabel, primary && styles.doorLabelPrimary]}>{label}</Text>
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.ground },
   bar: {
@@ -265,7 +276,7 @@ const styles = StyleSheet.create({
     paddingBottom: Space.ms,
   },
   barTitle: { fontFamily: Fonts.sans, fontSize: 34, fontWeight: '700', color: Colors.primary },
-  content: { paddingTop: Space.s, paddingBottom: 120, gap: Space.xl },
+  content: { paddingTop: Space.s, paddingBottom: 120 },
   headerButtons: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -274,31 +285,29 @@ const styles = StyleSheet.create({
     gap: 30,
     paddingHorizontal: 6,
   },
-  sectionTitle: {
+  intro: {
     fontFamily: Fonts.sans,
     fontSize: 15,
-    fontWeight: '600',
+    lineHeight: 22,
     color: Colors.inactive,
     marginHorizontal: Screen.margin,
-    marginBottom: Space.m,
   },
-  shelfSection: { gap: 0 },
-  shelf: { paddingHorizontal: Screen.margin, gap: Space.l },
-  empty: { flex: 1, justifyContent: 'center', paddingHorizontal: Screen.margin, gap: Space.m },
-  emptyTitle: { fontFamily: Fonts.serif, fontSize: 28, color: Colors.primary },
-  emptyBody: { fontFamily: Fonts.sans, fontSize: 15, lineHeight: 22, color: Colors.inactive },
-  doors: { marginTop: Space.l, gap: Space.m },
-  door: {
-    paddingVertical: Space.ms,
-    borderRadius: Radius.card,
-    alignItems: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.stroke,
-    backgroundColor: Colors.surface,
+  sectionTitle: {
+    fontFamily: Fonts.sans,
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.primary,
+    marginHorizontal: Screen.margin,
   },
-  doorPrimary: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  doorLabel: { fontFamily: Fonts.sans, fontSize: 16, color: Colors.primary },
-  doorLabelPrimary: { color: Colors.ground, fontWeight: '600' },
+  sectionSubtitle: {
+    fontFamily: Fonts.sans,
+    fontSize: 13,
+    color: Colors.inactive,
+    marginHorizontal: Screen.margin,
+    marginTop: 2,
+  },
+  shelfSection: { marginTop: Space.xl },
+  shelf: { paddingHorizontal: Screen.margin, paddingTop: Space.m, gap: Space.l },
   busy: {
     position: 'absolute',
     top: 0,
@@ -316,7 +325,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.ground,
     paddingHorizontal: Space.xl,
     paddingVertical: Space.l,
-    borderRadius: Radius.card,
+    borderRadius: 14,
     overflow: 'hidden',
   },
 });

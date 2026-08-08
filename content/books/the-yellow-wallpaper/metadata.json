@@ -1,0 +1,36 @@
+{
+  "id": "the-yellow-wallpaper",
+  "title": "The Yellow Wallpaper",
+  "author": "Charlotte Perkins Gilman",
+  "category": "Short Stories",
+  "year": 1892,
+  "description": "A woman is prescribed rest and forbidden to write, so she writes anyway, about the wallpaper. Half an hour, and the last page rearranges the rest.",
+  "shelves": [
+    "featured",
+    "stories",
+    "gothic",
+    "short"
+  ],
+  "featured": true,
+  "file": "books/the-yellow-wallpaper/book.txt",
+  "cover": "books/the-yellow-wallpaper/cover.jpg",
+  "wordCount": 6085,
+  "charCount": 31497,
+  "estimatedReadingTime": 24,
+  "estimatedListeningTime": 34,
+  "bodyOffset": 51,
+  "snippet": "It is very seldom that mere ordinary people like John and myself secure ancestral halls for the summer.",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1952",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1952.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1952/pg1952.cover.medium.jpg",
+    "gutenbergId": 1952,
+    "gutenbergTitle": "The Yellow Wallpaper",
+    "gutenbergAuthor": "Charlotte Perkins Gilman",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "fe7b2dc285e4588e"
+  }
+}

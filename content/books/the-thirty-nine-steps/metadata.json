@@ -1,0 +1,35 @@
+{
+  "id": "the-thirty-nine-steps",
+  "title": "The Thirty-Nine Steps",
+  "author": "John Buchan",
+  "category": "Thriller",
+  "year": 1915,
+  "description": "A bored man in London finds a corpse in his flat and spends the next two hundred miles running. The template every chase thriller has copied since.",
+  "shelves": [
+    "mystery",
+    "adventure",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/the-thirty-nine-steps/book.txt",
+  "cover": "books/the-thirty-nine-steps/cover.jpg",
+  "wordCount": 40976,
+  "charCount": 214562,
+  "estimatedReadingTime": 164,
+  "estimatedListeningTime": 228,
+  "bodyOffset": 1159,
+  "snippet": "I returned from the City about three o’clock on that May afternoon pretty well disgusted with life. I had been three months in the Old Coun…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/558",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/558.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/558/pg558.cover.medium.jpg",
+    "gutenbergId": 558,
+    "gutenbergTitle": "The Thirty-Nine Steps",
+    "gutenbergAuthor": "John Buchan",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "afb8565946cac75c"
+  }
+}

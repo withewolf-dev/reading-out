@@ -1,0 +1,33 @@
+{
+  "id": "the-prince",
+  "title": "The Prince",
+  "author": "Niccolò Machiavelli",
+  "category": "Philosophy",
+  "year": 1532,
+  "description": "A job application in the form of a manual on holding power. Cold, specific, and still the book people mean when they say a name as an adjective.",
+  "shelves": [
+    "ideas"
+  ],
+  "featured": false,
+  "file": "books/the-prince/book.txt",
+  "cover": "books/the-prince/cover.jpg",
+  "wordCount": 49894,
+  "charCount": 281869,
+  "estimatedReadingTime": 200,
+  "estimatedListeningTime": 277,
+  "bodyOffset": 2393,
+  "snippet": "Nicolo Machiavelli, born at Florence on 3rd May 1469. From 1494 to 1512 held an official post at Florence which included diplomatic mission…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1232",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1232.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1232/pg1232.cover.medium.jpg",
+    "gutenbergId": 1232,
+    "gutenbergTitle": "The Prince",
+    "gutenbergAuthor": "Niccolò Machiavelli",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "ca004757c9e89502"
+  }
+}

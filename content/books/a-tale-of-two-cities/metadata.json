@@ -1,0 +1,34 @@
+{
+  "id": "a-tale-of-two-cities",
+  "title": "A Tale of Two Cities",
+  "author": "Charles Dickens",
+  "category": "Historical Fiction",
+  "year": 1859,
+  "description": "London and Paris, before and during the Terror. It has the most famous opening in English and an ending that earns every word of it.",
+  "shelves": [
+    "classics",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/a-tale-of-two-cities/book.txt",
+  "cover": "books/a-tale-of-two-cities/cover.jpg",
+  "wordCount": 135886,
+  "charCount": 756847,
+  "estimatedReadingTime": 544,
+  "estimatedListeningTime": 755,
+  "bodyOffset": 1607,
+  "snippet": "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, i…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/98",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/98.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/98/pg98.cover.medium.jpg",
+    "gutenbergId": 98,
+    "gutenbergTitle": "A Tale of Two Cities",
+    "gutenbergAuthor": "Charles Dickens",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "14ce632386915ae3"
+  }
+}

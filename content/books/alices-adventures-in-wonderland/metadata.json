@@ -1,0 +1,34 @@
+{
+  "id": "alices-adventures-in-wonderland",
+  "title": "Alice's Adventures in Wonderland",
+  "author": "Lewis Carroll",
+  "category": "Fantasy",
+  "year": 1865,
+  "description": "Down the rabbit hole, through a book that behaves like the logic problem it is. Two hours, and the jokes are aimed at adults more than you remember.",
+  "shelves": [
+    "fantasy",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/alices-adventures-in-wonderland/book.txt",
+  "cover": "books/alices-adventures-in-wonderland/cover.jpg",
+  "wordCount": 26524,
+  "charCount": 143777,
+  "estimatedReadingTime": 106,
+  "estimatedListeningTime": 147,
+  "bodyOffset": 550,
+  "snippet": "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/11",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/11.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/11/pg11.cover.medium.jpg",
+    "gutenbergId": 11,
+    "gutenbergTitle": "Alice's Adventures in Wonderland",
+    "gutenbergAuthor": "Lewis Carroll",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "841225fa6989db68"
+  }
+}

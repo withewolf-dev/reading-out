@@ -1,0 +1,36 @@
+{
+  "id": "jane-eyre",
+  "title": "Jane Eyre",
+  "author": "Charlotte Brontë",
+  "category": "Romance",
+  "year": 1847,
+  "description": "A plain, poor, friendless governess refuses, over and over, to be smaller than she is. The house she works in has a secret on the third floor.",
+  "shelves": [
+    "romance",
+    "gothic",
+    "classics",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/jane-eyre/book.txt",
+  "cover": "books/jane-eyre/cover.jpg",
+  "wordCount": 185390,
+  "charCount": 1021730,
+  "estimatedReadingTime": 742,
+  "estimatedListeningTime": 1030,
+  "bodyOffset": 5414,
+  "snippet": "There was no possibility of taking a walk that day. We had been wandering, indeed, in the leafless shrubbery an hour in the morning; but si…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1260",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1260.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1260/pg1260.cover.medium.jpg",
+    "gutenbergId": 1260,
+    "gutenbergTitle": "Jane Eyre: An Autobiography",
+    "gutenbergAuthor": "Charlotte Brontë",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "aaa7784ce32253e1"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "the-turn-of-the-screw",
+  "title": "The Turn of the Screw",
+  "author": "Henry James",
+  "category": "Gothic",
+  "year": 1898,
+  "description": "A governess sees figures on the tower and the lake. Whether anyone else does is the argument the book has been starting for over a century.",
+  "shelves": [
+    "gothic",
+    "stories",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/the-turn-of-the-screw/book.txt",
+  "cover": "books/the-turn-of-the-screw/cover.jpg",
+  "wordCount": 42277,
+  "charCount": 227962,
+  "estimatedReadingTime": 169,
+  "estimatedListeningTime": 235,
+  "bodyOffset": 187,
+  "snippet": "The story had held us, round the fire, sufficiently breathless, but except the obvious remark that it was gruesome, as, on Christmas Eve in…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/209",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/209.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/209/pg209.cover.medium.jpg",
+    "gutenbergId": 209,
+    "gutenbergTitle": "The Turn of the Screw",
+    "gutenbergAuthor": "Henry James",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "b1571f615900ac15"
+  }
+}

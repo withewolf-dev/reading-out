@@ -1,0 +1,35 @@
+{
+  "id": "dracula",
+  "title": "Dracula",
+  "author": "Bram Stoker",
+  "category": "Horror",
+  "year": 1897,
+  "description": "Told entirely in letters, diaries and telegrams by people who do not yet know what they are describing. Reads aloud better than almost anything else here.",
+  "shelves": [
+    "featured",
+    "gothic",
+    "long"
+  ],
+  "featured": true,
+  "file": "books/dracula/book.txt",
+  "cover": "books/dracula/cover.jpg",
+  "wordCount": 161319,
+  "charCount": 842625,
+  "estimatedReadingTime": 645,
+  "estimatedListeningTime": 896,
+  "bodyOffset": 1761,
+  "snippet": "3 May. Bistritz.--Left Munich at 8:35 P. M., on 1st May, arriving at Vienna early next morning; should have arrived at 6:46, but train was…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/345",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/345.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/345/pg345.cover.medium.jpg",
+    "gutenbergId": 345,
+    "gutenbergTitle": "Dracula",
+    "gutenbergAuthor": "Bram Stoker",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "0a609f27662ae8bb"
+  }
+}

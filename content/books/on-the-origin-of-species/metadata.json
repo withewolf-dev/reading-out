@@ -1,0 +1,34 @@
+{
+  "id": "on-the-origin-of-species",
+  "title": "On the Origin of Species",
+  "author": "Charles Darwin",
+  "category": "Science",
+  "year": 1859,
+  "description": "Darwin’s first edition: patient, hedged, crammed with pigeons and barnacles, and building an argument he had sat on for twenty years.",
+  "shelves": [
+    "world",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/on-the-origin-of-species/book.txt",
+  "cover": null,
+  "wordCount": 155526,
+  "charCount": 932143,
+  "estimatedReadingTime": 622,
+  "estimatedListeningTime": 864,
+  "bodyOffset": 693,
+  "snippet": "“But with regard to the material world, we can at least go so far as this—we can perceive that events are brought about not by insulated in…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1228",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1228.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1228/pg1228.cover.medium.jpg",
+    "gutenbergId": 1228,
+    "gutenbergTitle": "On the Origin of Species By Means of Natural Selection",
+    "gutenbergAuthor": "Charles Darwin",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "c937ea07711b909a"
+  }
+}

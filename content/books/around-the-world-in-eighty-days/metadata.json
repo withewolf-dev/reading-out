@@ -1,0 +1,33 @@
+{
+  "id": "around-the-world-in-eighty-days",
+  "title": "Around the World in Eighty Days",
+  "author": "Jules Verne",
+  "category": "Adventure",
+  "year": 1873,
+  "description": "Phileas Fogg bets half his fortune that the planet can be circled on schedule, then refuses to look at any of it. A comedy about punctuality.",
+  "shelves": [
+    "adventure"
+  ],
+  "featured": false,
+  "file": "books/around-the-world-in-eighty-days/book.txt",
+  "cover": "books/around-the-world-in-eighty-days/cover.jpg",
+  "wordCount": 63332,
+  "charCount": 368883,
+  "estimatedReadingTime": 253,
+  "estimatedListeningTime": 352,
+  "bodyOffset": 3448,
+  "snippet": "Mr. Phileas Fogg lived, in 1872, at No. 7, Saville Row, Burlington Gardens, the house in which Sheridan died in 1814. He was one of the mos…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/103",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/103.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/103/pg103.cover.medium.jpg",
+    "gutenbergId": 103,
+    "gutenbergTitle": "Around the World in Eighty Days",
+    "gutenbergAuthor": "Jules Verne",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "6d86dfd78847cc81"
+  }
+}

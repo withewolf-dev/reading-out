@@ -1,0 +1,36 @@
+{
+  "id": "wuthering-heights",
+  "title": "Wuthering Heights",
+  "author": "Emily Brontë",
+  "category": "Gothic",
+  "year": 1847,
+  "description": "Not a love story so much as a haunting with two people in it. Heathcliff and Catherine tear two families apart across two generations of Yorkshire moorland.",
+  "shelves": [
+    "gothic",
+    "romance",
+    "classics",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/wuthering-heights/book.txt",
+  "cover": "books/wuthering-heights/cover.jpg",
+  "wordCount": 115945,
+  "charCount": 644864,
+  "estimatedReadingTime": 464,
+  "estimatedListeningTime": 644,
+  "bodyOffset": 36,
+  "snippet": "1801—I have just returned from a visit to my landlord—the solitary neighbour that I shall be troubled with. This is certainly a beautiful c…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/768",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/768.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/768/pg768.cover.medium.jpg",
+    "gutenbergId": 768,
+    "gutenbergTitle": "Wuthering Heights",
+    "gutenbergAuthor": "Emily Brontë",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "b814682f7c8899cc"
+  }
+}

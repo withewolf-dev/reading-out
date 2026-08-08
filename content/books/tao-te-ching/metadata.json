@@ -1,0 +1,34 @@
+{
+  "id": "tao-te-ching",
+  "title": "Tao Te Ching",
+  "author": "Laozi",
+  "category": "Philosophy",
+  "year": -400,
+  "description": "Eighty-one short chapters on doing less and yielding first. In this 1891 translation by James Legge, it takes under an hour and repays years.",
+  "shelves": [
+    "ideas",
+    "short"
+  ],
+  "featured": false,
+  "file": "books/tao-te-ching/book.txt",
+  "cover": null,
+  "wordCount": 10657,
+  "charCount": 58385,
+  "estimatedReadingTime": 43,
+  "estimatedListeningTime": 59,
+  "bodyOffset": 95,
+  "snippet": "Ch. 1. 1. The Tao that can be trodden is not the enduring and unchanging Tao. The name that can be named is not the enduring and unchanging…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/216",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/216.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/216/pg216.cover.medium.jpg",
+    "gutenbergId": 216,
+    "gutenbergTitle": "The Tao Teh King, or the Tao and its Characteristics",
+    "gutenbergAuthor": "Laozi",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "45b6273402d16397"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "the-mysterious-affair-at-styles",
+  "title": "The Mysterious Affair at Styles",
+  "author": "Agatha Christie",
+  "category": "Mystery",
+  "year": 1920,
+  "description": "Christie’s first novel and Poirot’s first appearance: a country house, a poisoning, and a little Belgian with an ego to match his moustache.",
+  "shelves": [
+    "mystery"
+  ],
+  "featured": false,
+  "file": "books/the-mysterious-affair-at-styles/book.txt",
+  "cover": "books/the-mysterious-affair-at-styles/cover.jpg",
+  "wordCount": 56531,
+  "charCount": 320319,
+  "estimatedReadingTime": 226,
+  "estimatedListeningTime": 314,
+  "bodyOffset": 476,
+  "snippet": "The intense interest aroused in the public by what was known at the time as “The Styles Case” has now somewhat subsided. Nevertheless, in v…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/863",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/863.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/863/pg863.cover.medium.jpg",
+    "gutenbergId": 863,
+    "gutenbergTitle": "The Mysterious Affair at Styles",
+    "gutenbergAuthor": "Agatha Christie",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "c96ed9614a6288f7"
+  }
+}

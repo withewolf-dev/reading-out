@@ -4,12 +4,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
-import { progressFraction, type ReadingRow } from '@/db';
+import { progressFraction, type LibraryEntry } from '@/lib/library';
 import { percentLabel, remainingLabel } from '@/lib/text';
 import { Colors, CoverWidth, Fonts, Radius, Screen, Space, Track } from '@/theme';
 
 type Props = {
-  reading: ReadingRow;
+  entry: LibraryEntry;
   isPlaying: boolean;
   wordsPerMinute: number;
   onOpen: () => void;
@@ -19,16 +19,16 @@ type Props = {
 
 /** Compact "Continue" card, ~120pt — the hero earns its place by being small (§15). */
 export function ContinueCard({
-  reading,
+  entry,
   isPlaying,
   wordsPerMinute,
   onOpen,
   onTogglePlay,
   onLongPress,
 }: Props) {
-  const fraction = progressFraction(reading);
+  const fraction = progressFraction(entry);
   const percent = percentLabel(fraction);
-  const finished = reading.finished_at != null || fraction >= 1;
+  const finished = entry.finished || fraction >= 1;
 
   return (
     <Pressable onPress={onOpen} onLongPress={onLongPress} style={styles.press}>
@@ -38,19 +38,19 @@ export function ContinueCard({
         end={{ x: 0, y: 1 }}
         style={styles.card}>
         <ReadingArtwork
-          title={reading.title}
-          coverPath={reading.cover_path}
+          title={entry.title}
+          coverPath={entry.cover}
           width={CoverWidth.hero}
           radius={Radius.thumb}
         />
         <View style={styles.body}>
           <Text numberOfLines={2} style={styles.title}>
-            {reading.title}
+            {entry.title}
           </Text>
           <Text numberOfLines={1} style={styles.meta}>
             {finished
               ? 'Finished'
-              : [remainingLabel(reading.word_count, fraction, wordsPerMinute), percent]
+              : [remainingLabel(entry.wordCount, fraction, wordsPerMinute), percent]
                   .filter(Boolean)
                   .join(' · ')}
           </Text>

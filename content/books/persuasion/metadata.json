@@ -1,0 +1,34 @@
+{
+  "id": "persuasion",
+  "title": "Persuasion",
+  "author": "Jane Austen",
+  "category": "Romance",
+  "year": 1817,
+  "description": "Anne Elliot was talked out of the man she loved eight years ago. He has just walked back into the room. Austen’s last and quietest novel, and the one that aches.",
+  "shelves": [
+    "romance",
+    "classics"
+  ],
+  "featured": false,
+  "file": "books/persuasion/book.txt",
+  "cover": "books/persuasion/cover.jpg",
+  "wordCount": 83335,
+  "charCount": 464587,
+  "estimatedReadingTime": 333,
+  "estimatedListeningTime": 463,
+  "bodyOffset": 355,
+  "snippet": "Sir Walter Elliot, of Kellynch Hall, in Somersetshire, was a man who, for his own amusement, never took up any book but the Baronetage; the…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/105",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/105.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/105/pg105.cover.medium.jpg",
+    "gutenbergId": 105,
+    "gutenbergTitle": "Persuasion",
+    "gutenbergAuthor": "Jane Austen",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "8731bb0c8e68d8cb"
+  }
+}

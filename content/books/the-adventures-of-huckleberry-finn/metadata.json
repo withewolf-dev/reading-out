@@ -1,0 +1,35 @@
+{
+  "id": "the-adventures-of-huckleberry-finn",
+  "title": "Adventures of Huckleberry Finn",
+  "author": "Mark Twain",
+  "category": "Adventure",
+  "year": 1884,
+  "description": "A boy and a man escaping slavery float down the Mississippi on a raft. Twain wrote American speech onto the page and nobody has undone it since.",
+  "shelves": [
+    "adventure",
+    "classics",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/the-adventures-of-huckleberry-finn/book.txt",
+  "cover": "books/the-adventures-of-huckleberry-finn/cover.jpg",
+  "wordCount": 111085,
+  "charCount": 568708,
+  "estimatedReadingTime": 444,
+  "estimatedListeningTime": 617,
+  "bodyOffset": 7187,
+  "snippet": "Persons attempting to find a motive in this narrative will be prosecuted; persons attempting to find a moral in it will be banished; person…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/76",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/76.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/76/pg76.cover.medium.jpg",
+    "gutenbergId": 76,
+    "gutenbergTitle": "Adventures of Huckleberry Finn",
+    "gutenbergAuthor": "Mark Twain",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "71c92e97dd56f360"
+  }
+}

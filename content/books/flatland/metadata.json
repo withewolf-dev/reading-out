@@ -1,0 +1,35 @@
+{
+  "id": "flatland",
+  "title": "Flatland",
+  "author": "Edwin A. Abbott",
+  "category": "Science Fiction",
+  "year": 1884,
+  "description": "A square living in two dimensions is visited by a sphere. Part geometry lesson, part savage satire of Victorian class, and unlike anything else.",
+  "shelves": [
+    "scifi",
+    "ideas",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/flatland/book.txt",
+  "cover": "books/flatland/cover.jpg",
+  "wordCount": 33827,
+  "charCount": 193357,
+  "estimatedReadingTime": 135,
+  "estimatedListeningTime": 188,
+  "bodyOffset": 2004,
+  "snippet": "I call our world Flatland, not because we call it so, but to make its nature clearer to you, my happy readers, who are privileged to live i…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/97",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/97.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/97/pg97.cover.medium.jpg",
+    "gutenbergId": 97,
+    "gutenbergTitle": "Flatland: A Romance of Many Dimensions",
+    "gutenbergAuthor": "Edwin Abbott Abbott",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "43957eabfd46dd0f"
+  }
+}

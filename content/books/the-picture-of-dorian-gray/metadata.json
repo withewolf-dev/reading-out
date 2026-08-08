@@ -1,0 +1,34 @@
+{
+  "id": "the-picture-of-dorian-gray",
+  "title": "The Picture of Dorian Gray",
+  "author": "Oscar Wilde",
+  "category": "Gothic",
+  "year": 1890,
+  "description": "A portrait ages so its subject need not. Wilde’s only novel, and the epigrams keep landing right up to the moment it turns genuinely nasty.",
+  "shelves": [
+    "gothic",
+    "classics"
+  ],
+  "featured": false,
+  "file": "books/the-picture-of-dorian-gray/book.txt",
+  "cover": "books/the-picture-of-dorian-gray/cover.jpg",
+  "wordCount": 78979,
+  "charCount": 429032,
+  "estimatedReadingTime": 316,
+  "estimatedListeningTime": 439,
+  "bodyOffset": 2401,
+  "snippet": "The studio was filled with the rich odour of roses, and when the light summer wind stirred amidst the trees of the garden, there came throu…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/174",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/174.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/174/pg174.cover.medium.jpg",
+    "gutenbergId": 174,
+    "gutenbergTitle": "The Picture of Dorian Gray",
+    "gutenbergAuthor": "Oscar Wilde",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "5ac05b449eac7b52"
+  }
+}

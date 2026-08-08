@@ -10,6 +10,8 @@ import { ReaderView } from '../../../modules/speech-engine/src/ReaderView';
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
 import { getReading, getReadingText, putSetting, touchOpened, type ReadingRow } from '@/db';
+import { catalogBook, type CatalogBook } from '@/lib/catalog';
+import { loadCoverUri } from '@/lib/library';
 import { player, prefs, RATE, usePlayer, usePrefs } from '@/speech/engine';
 import { Colors, coverHue, Fonts, Radius, Screen, Space, tintedSurface, Track } from '@/theme';
 
@@ -25,7 +27,9 @@ export default function ReaderScreen() {
   const { fontSize, rate } = usePrefs();
 
   const [reading, setReading] = useState<ReadingRow | null>(null);
+  const [book, setBook] = useState<CatalogBook | null>(null);
   const [text, setText] = useState<string | null>(null);
+  const [coverUri, setCoverUri] = useState<string | null>(null);
   const [tint, setTint] = useState({ hue: 210, saturation: 0.1 });
   const insets = useSafeAreaInsets();
 
@@ -35,12 +39,25 @@ export default function ReaderScreen() {
       if (cancelled) return;
       setReading(row ?? null);
       setText(body);
+      // A bundled book keeps its cover in the app bundle rather than in the
+      // row; the native reader tints the page from the file, so resolve it.
+      const entry = catalogBook(row?.catalog_id);
+      setBook(entry);
+      if (entry) loadCoverUri(entry).then((uri) => !cancelled && setCoverUri(uri));
+      else setCoverUri(row?.cover_path ?? null);
     });
     touchOpened(db, readingId).catch(() => {});
     return () => {
       cancelled = true;
     };
   }, [db, readingId]);
+
+  /**
+   * Where this reading starts when nothing has been played yet: the first
+   * chapter of a bundled book, past its title page and contents list.
+   */
+  const openingOffset =
+    (reading?.progress_offset ?? 0) > 0 ? reading!.progress_offset : (book?.bodyOffset ?? 0);
 
   const isCurrent = state.readingId === readingId;
   const playing = isCurrent && state.status === 'speaking';
@@ -65,9 +82,12 @@ export default function ReaderScreen() {
     if (player.isLoaded(readingId)) player.toggle();
     else {
       const finished = reading.finished_at != null;
-      player.play({ id: readingId, title: reading.title, text }, finished ? 0 : reading.progress_offset);
+      player.play(
+        { id: readingId, title: reading.title, text },
+        finished ? (book?.bodyOffset ?? 0) : openingOffset
+      );
     }
-  }, [reading, readingId, text]);
+  }, [book, openingOffset, reading, readingId, text]);
 
   const cycleSpeed = useCallback(() => {
     const current = Math.round((rate / RATE.default) * 100) / 100;
@@ -117,9 +137,9 @@ export default function ReaderScreen() {
           text={text}
           fontSize={fontSize}
           active={isCurrent}
-          startOffset={reading?.progress_offset ?? 0}
+          startOffset={openingOffset}
           hue={coverHue(reading?.title ?? '')}
-          coverPath={reading?.cover_path}
+          coverPath={coverUri}
           onSeek={(event) => startAt(event.nativeEvent.offset)}
           onTint={(event) => setTint(event.nativeEvent)}
         />
@@ -130,13 +150,20 @@ export default function ReaderScreen() {
       <View style={[styles.header, { paddingTop: insets.top + 60 }]} pointerEvents="none">
         <ReadingArtwork
           title={reading?.title ?? ''}
-          coverPath={reading?.cover_path}
+          coverPath={book?.cover ?? reading?.cover_path}
           width={54}
           radius={Radius.thumbSmall}
         />
-        <Text numberOfLines={2} style={styles.headerTitle}>
-          {reading?.title ?? ''}
-        </Text>
+        <View style={styles.headerText}>
+          <Text numberOfLines={2} style={styles.headerTitle}>
+            {reading?.title ?? ''}
+          </Text>
+          {book ? (
+            <Text numberOfLines={1} style={styles.headerAuthor}>
+              {book.author}
+            </Text>
+          ) : null}
+        </View>
       </View>
 
       {/* Apple Podcasts' transcript controls: everything sits directly on the
@@ -221,17 +248,17 @@ const styles = StyleSheet.create({
     paddingBottom: Space.m,
     zIndex: 5,
   },
+  // Keeps the column narrow enough that a book title breaks across two lines
+  // instead of running the full width of the screen.
+  headerText: { flex: 1, paddingRight: Space.xl, gap: 2 },
   headerTitle: {
-    flex: 1,
     fontFamily: Fonts.sans,
     fontSize: 20,
     fontWeight: '700',
     lineHeight: 25,
     color: Colors.primary,
-    // Keeps the column narrow enough that a book title breaks across two lines
-    // instead of running the full width of the screen.
-    paddingRight: Space.xl,
   },
+  headerAuthor: { fontFamily: Fonts.sans, fontSize: 14, color: Colors.inactive },
   dock: {
     position: 'absolute',
     left: 0,

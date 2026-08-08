@@ -1,0 +1,35 @@
+{
+  "id": "the-adventures-of-sherlock-holmes",
+  "title": "The Adventures of Sherlock Holmes",
+  "author": "Arthur Conan Doyle",
+  "category": "Mystery",
+  "year": 1892,
+  "description": "Twelve self-contained cases, each about forty minutes. The best possible way to test a reading app: finish one, and you have finished something.",
+  "shelves": [
+    "featured",
+    "mystery",
+    "stories"
+  ],
+  "featured": true,
+  "file": "books/the-adventures-of-sherlock-holmes/book.txt",
+  "cover": "books/the-adventures-of-sherlock-holmes/cover.jpg",
+  "wordCount": 104506,
+  "charCount": 561654,
+  "estimatedReadingTime": 418,
+  "estimatedListeningTime": 581,
+  "bodyOffset": 538,
+  "snippet": "To Sherlock Holmes she is always the woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predomin…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1661",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1661.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1661/pg1661.cover.medium.jpg",
+    "gutenbergId": 1661,
+    "gutenbergTitle": "The Adventures of Sherlock Holmes",
+    "gutenbergAuthor": "Arthur Conan Doyle",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "314bd39621b18164"
+  }
+}

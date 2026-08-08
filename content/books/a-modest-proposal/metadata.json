@@ -1,0 +1,35 @@
+{
+  "id": "a-modest-proposal",
+  "title": "A Modest Proposal",
+  "author": "Jonathan Swift",
+  "category": "Essays",
+  "year": 1729,
+  "description": "Ten minutes. Swift proposes, with impeccable arithmetic, that the Irish poor sell their children as food. The high-water mark of the straight face.",
+  "shelves": [
+    "featured",
+    "ideas",
+    "short"
+  ],
+  "featured": true,
+  "file": "books/a-modest-proposal/book.txt",
+  "cover": "books/a-modest-proposal/cover.jpg",
+  "wordCount": 3420,
+  "charCount": 19493,
+  "estimatedReadingTime": 14,
+  "estimatedListeningTime": 19,
+  "bodyOffset": 19,
+  "snippet": "For preventing the children of poor people in Ireland, from being a burden on their parents or country, and for making them beneficial to t…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1080",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1080.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1080/pg1080.cover.medium.jpg",
+    "gutenbergId": 1080,
+    "gutenbergTitle": "A Modest Proposal",
+    "gutenbergAuthor": "Jonathan Swift",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "7f0a8029f9b1d451"
+  }
+}

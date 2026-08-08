@@ -1,0 +1,35 @@
+{
+  "id": "walden",
+  "title": "Walden",
+  "author": "Henry David Thoreau",
+  "category": "Memoir",
+  "year": 1854,
+  "description": "Two years in a cabin he built for $28.12½, itemised. Somewhere between a household budget and a manifesto for wanting less.",
+  "shelves": [
+    "lives",
+    "world",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/walden/book.txt",
+  "cover": "books/walden/cover.jpg",
+  "wordCount": 115813,
+  "charCount": 632187,
+  "estimatedReadingTime": 463,
+  "estimatedListeningTime": 643,
+  "bodyOffset": 384,
+  "snippet": "\"I do not propose to write an ode to dejection, but to brag as lustily as chanticleer in the morning, standing on his roost, if only to wak…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/205",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/205.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/205/pg205.cover.medium.jpg",
+    "gutenbergId": 205,
+    "gutenbergTitle": "Walden, and On The Duty Of Civil Disobedience",
+    "gutenbergAuthor": "Henry David Thoreau",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "078a32b5e2535deb"
+  }
+}

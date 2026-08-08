@@ -1,0 +1,34 @@
+{
+  "id": "relativity",
+  "title": "Relativity: The Special and General Theory",
+  "author": "Albert Einstein",
+  "category": "Science",
+  "year": 1916,
+  "description": "Einstein explaining his own work to people who are not physicists, using trains and embankments. He meant it to be readable, and it is.",
+  "shelves": [
+    "world",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/relativity/book.txt",
+  "cover": "books/relativity/cover.jpg",
+  "wordCount": 31048,
+  "charCount": 183269,
+  "estimatedReadingTime": 124,
+  "estimatedListeningTime": 172,
+  "bodyOffset": 4896,
+  "snippet": "In your schooldays most of you who read this book made acquaintance with the noble building of Euclid’s geometry, and you remember—perhaps…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/30155",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/30155.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/30155/pg30155.cover.medium.jpg",
+    "gutenbergId": 30155,
+    "gutenbergTitle": "Relativity: The Special and General Theory",
+    "gutenbergAuthor": "Albert Einstein",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "52dc5c2bcc41a3e3"
+  }
+}

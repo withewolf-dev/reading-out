@@ -1,0 +1,35 @@
+{
+  "id": "common-sense",
+  "title": "Common Sense",
+  "author": "Thomas Paine",
+  "category": "History",
+  "year": 1776,
+  "description": "The pamphlet that argued a continent into a war, written in language a farmer could read aloud in a tavern. It sold to a fifth of the colonies.",
+  "shelves": [
+    "ideas",
+    "world",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/common-sense/book.txt",
+  "cover": "books/common-sense/cover.jpg",
+  "wordCount": 21992,
+  "charCount": 125934,
+  "estimatedReadingTime": 88,
+  "estimatedListeningTime": 122,
+  "bodyOffset": 361,
+  "snippet": "A new edition, with several additions in the body of the work. To which is added an appendix; together with an address to the people called…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/147",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/147.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/147/pg147.cover.medium.jpg",
+    "gutenbergId": 147,
+    "gutenbergTitle": "Common Sense",
+    "gutenbergAuthor": "Thomas Paine",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "0568f2afc2de71a4"
+  }
+}

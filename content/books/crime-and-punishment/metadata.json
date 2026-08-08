@@ -1,0 +1,34 @@
+{
+  "id": "crime-and-punishment",
+  "title": "Crime and Punishment",
+  "author": "Fyodor Dostoevsky",
+  "category": "Literary Fiction",
+  "year": 1866,
+  "description": "A destitute student in St Petersburg murders a pawnbroker to prove a theory about himself, then spends four hundred pages being interrogated by his own mind.",
+  "shelves": [
+    "classics",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/crime-and-punishment/book.txt",
+  "cover": "books/crime-and-punishment/cover.jpg",
+  "wordCount": 203505,
+  "charCount": 1134363,
+  "estimatedReadingTime": 814,
+  "estimatedListeningTime": 1131,
+  "bodyOffset": 4580,
+  "snippet": "On an exceptionally hot evening early in July a young man came out of the garret in which he lodged in S. Place and walked slowly, as thoug…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/2554",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/2554.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/2554/pg2554.cover.medium.jpg",
+    "gutenbergId": 2554,
+    "gutenbergTitle": "Crime and Punishment",
+    "gutenbergAuthor": "Fyodor Dostoyevsky",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "6aa7f6b79fb183e2"
+  }
+}

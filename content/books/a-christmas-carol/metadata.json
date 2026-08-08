@@ -1,0 +1,35 @@
+{
+  "id": "a-christmas-carol",
+  "title": "A Christmas Carol",
+  "author": "Charles Dickens",
+  "category": "Literary Fiction",
+  "year": 1843,
+  "description": "Three ghosts, one night, one thoroughly deserved fright. A novella built to be read aloud in an evening — Dickens toured it himself for years.",
+  "shelves": [
+    "classics",
+    "stories",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/a-christmas-carol/book.txt",
+  "cover": "books/a-christmas-carol/cover.jpg",
+  "wordCount": 28541,
+  "charCount": 158352,
+  "estimatedReadingTime": 114,
+  "estimatedListeningTime": 159,
+  "bodyOffset": 91,
+  "snippet": "I HAVE endeavoured in this Ghostly little book, to raise the Ghost of an Idea, which shall not put my readers out of humour with themselves…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/46",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/46.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/46/pg46.cover.medium.jpg",
+    "gutenbergId": 46,
+    "gutenbergTitle": "A Christmas Carol in Prose; Being a Ghost Story of Christmas",
+    "gutenbergAuthor": "Charles Dickens",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "10e84c319e92728b"
+  }
+}

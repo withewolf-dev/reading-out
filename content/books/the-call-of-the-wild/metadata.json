@@ -1,0 +1,34 @@
+{
+  "id": "the-call-of-the-wild",
+  "title": "The Call of the Wild",
+  "author": "Jack London",
+  "category": "Adventure",
+  "year": 1903,
+  "description": "A stolen dog is shipped north to the Klondike and unlearns, week by week, everything that made him a pet. Lean, brutal, and over in two hours.",
+  "shelves": [
+    "adventure",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/the-call-of-the-wild/book.txt",
+  "cover": "books/the-call-of-the-wild/cover.jpg",
+  "wordCount": 31823,
+  "charCount": 175532,
+  "estimatedReadingTime": 127,
+  "estimatedListeningTime": 177,
+  "bodyOffset": 308,
+  "snippet": "Buck did not read the newspapers, or he would have known that trouble was brewing, not alone for himself, but for every tide-water dog, str…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/215",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/215.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/215/pg215.cover.medium.jpg",
+    "gutenbergId": 215,
+    "gutenbergTitle": "The call of the wild",
+    "gutenbergAuthor": "Jack London",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "f123b589094bc0fd"
+  }
+}

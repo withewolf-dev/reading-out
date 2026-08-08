@@ -1,0 +1,34 @@
+{
+  "id": "the-innocents-abroad",
+  "title": "The Innocents Abroad",
+  "author": "Mark Twain",
+  "category": "Travel",
+  "year": 1869,
+  "description": "Twain on a package cruise to Europe and the Holy Land, being rude about all of it. The bestselling book of his lifetime, and the first travel comedy.",
+  "shelves": [
+    "world",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/the-innocents-abroad/book.txt",
+  "cover": "books/the-innocents-abroad/cover.jpg",
+  "wordCount": 193213,
+  "charCount": 1098036,
+  "estimatedReadingTime": 773,
+  "estimatedListeningTime": 1073,
+  "bodyOffset": 20125,
+  "snippet": "For months the great pleasure excursion to Europe and the Holy Land was chatted about in the newspapers everywhere in America and discussed…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/3176",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/3176.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/3176/pg3176.cover.medium.jpg",
+    "gutenbergId": 3176,
+    "gutenbergTitle": "The Innocents Abroad",
+    "gutenbergAuthor": "Mark Twain",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "9be9d051d12b0617"
+  }
+}

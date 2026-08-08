@@ -1,0 +1,33 @@
+{
+  "id": "peter-pan",
+  "title": "Peter Pan",
+  "author": "J. M. Barrie",
+  "category": "Fantasy",
+  "year": 1911,
+  "description": "Barrie’s own novel of Neverland, narrated by an adult who keeps interrupting to say how sad all this is. Much stranger than the pantomime.",
+  "shelves": [
+    "fantasy"
+  ],
+  "featured": false,
+  "file": "books/peter-pan/book.txt",
+  "cover": "books/peter-pan/cover.jpg",
+  "wordCount": 47268,
+  "charCount": 255414,
+  "estimatedReadingTime": 189,
+  "estimatedListeningTime": 263,
+  "bodyOffset": 941,
+  "snippet": "All children, except one, grow up. They soon know that they will grow up, and the way Wendy knew was this. One day when she was two years o…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/16",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/16.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/16/pg16.cover.medium.jpg",
+    "gutenbergId": 16,
+    "gutenbergTitle": "Peter Pan",
+    "gutenbergAuthor": "J. M. Barrie",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "3d66bf17a0b90802"
+  }
+}

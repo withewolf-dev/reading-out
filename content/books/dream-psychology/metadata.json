@@ -1,0 +1,33 @@
+{
+  "id": "dream-psychology",
+  "title": "Dream Psychology",
+  "author": "Sigmund Freud",
+  "category": "Psychology",
+  "year": 1920,
+  "description": "Freud’s own condensed introduction to dream interpretation, written for people who were never going to read the eight-hundred-page version.",
+  "shelves": [
+    "ideas"
+  ],
+  "featured": false,
+  "file": "books/dream-psychology/book.txt",
+  "cover": null,
+  "wordCount": 53658,
+  "charCount": 318442,
+  "estimatedReadingTime": 215,
+  "estimatedListeningTime": 298,
+  "bodyOffset": 399,
+  "snippet": "The medical profession is justly conservative. Human life should not be considered as the proper material for wild experiments.",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/15489",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/15489.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/15489/pg15489.cover.medium.jpg",
+    "gutenbergId": 15489,
+    "gutenbergTitle": "Dream Psychology: Psychoanalysis for Beginners",
+    "gutenbergAuthor": "Sigmund Freud",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "5e14dae14ffa7233"
+  }
+}

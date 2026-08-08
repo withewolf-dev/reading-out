@@ -1,0 +1,35 @@
+{
+  "id": "moby-dick",
+  "title": "Moby-Dick",
+  "author": "Herman Melville",
+  "category": "Literary Fiction",
+  "year": 1851,
+  "description": "One captain, one whale, and several hundred pages of digression on rope, whiteness and God. Strange, funny, and far wilder than its reputation.",
+  "shelves": [
+    "classics",
+    "adventure",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/moby-dick/book.txt",
+  "cover": "books/moby-dick/cover.jpg",
+  "wordCount": 212796,
+  "charCount": 1217126,
+  "estimatedReadingTime": 851,
+  "estimatedListeningTime": 1182,
+  "bodyOffset": 26128,
+  "snippet": "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/2701",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/2701.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/2701/pg2701.cover.medium.jpg",
+    "gutenbergId": 2701,
+    "gutenbergTitle": "Moby Dick; Or, The Whale",
+    "gutenbergAuthor": "Herman Melville",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "dd55c690763fc2fe"
+  }
+}

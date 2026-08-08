@@ -1,0 +1,35 @@
+{
+  "id": "the-legend-of-sleepy-hollow",
+  "title": "The Legend of Sleepy Hollow",
+  "author": "Washington Irving",
+  "category": "Short Stories",
+  "year": 1820,
+  "description": "Ichabod Crane, a Dutch hollow full of superstition, and a horseman on the bridge. American folklore, invented on the spot by one man.",
+  "shelves": [
+    "stories",
+    "gothic",
+    "short"
+  ],
+  "featured": false,
+  "file": "books/the-legend-of-sleepy-hollow/book.txt",
+  "cover": "books/the-legend-of-sleepy-hollow/cover.jpg",
+  "wordCount": 12214,
+  "charCount": 69672,
+  "estimatedReadingTime": 49,
+  "estimatedListeningTime": 68,
+  "bodyOffset": 299,
+  "snippet": "In the bosom of one of those spacious coves which indent the eastern shore of the Hudson, at that broad expansion of the river denominated…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/41",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/41.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/41/pg41.cover.medium.jpg",
+    "gutenbergId": 41,
+    "gutenbergTitle": "The Legend of Sleepy Hollow",
+    "gutenbergAuthor": "Washington Irving",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "8abed5a9d25ed90b"
+  }
+}

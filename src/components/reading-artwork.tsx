@@ -7,7 +7,11 @@ import { Colors, COVER_ASPECT, coverColors, Fonts, Radius } from '@/theme';
 
 type Props = {
   title: string;
-  coverPath?: string | null;
+  /**
+   * A file URI for an imported document's rendered first page, or a Metro asset
+   * handle (a number) for a bundled book's cover.
+   */
+  coverPath?: string | number | null;
   width: number;
   radius?: number;
   /** Only set this where no other text is laid over the artwork (§17.23). */
@@ -21,7 +25,7 @@ function ReadingArtworkView({ title, coverPath, width, radius = Radius.shelfCove
   if (coverPath) {
     return (
       <Image
-        source={{ uri: coverPath }}
+        source={typeof coverPath === 'number' ? coverPath : { uri: coverPath }}
         style={{ width, height, borderRadius: radius, backgroundColor: '#111' }}
         contentFit="cover"
       />

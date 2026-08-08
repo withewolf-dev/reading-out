@@ -12,7 +12,8 @@ import { Colors, CoverWidth, Fonts, Radius, Screen, Space, Track } from '@/theme
 
 type Props = {
   onOpen: (readingId: number) => void;
-  coverPath?: string | null;
+  /** A file URI for an imported document, or a Metro asset handle for a bundled book. */
+  coverPath?: string | number | null;
   /** Derived at import, never recomputed from the text here (§17.9). */
   wordCount?: number;
 };

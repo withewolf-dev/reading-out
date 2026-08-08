@@ -44,3 +44,8 @@ example
 
 # build/check artifacts
 .cache/
+
+# Raw Gutenberg downloads: a build cache for scripts/build-library.mjs.
+# The cleaned book.txt is what ships and what is committed.
+content/books/*/source.txt
+content/books/*/gutendex.json

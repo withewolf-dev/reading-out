@@ -1,0 +1,33 @@
+{
+  "id": "the-war-of-the-worlds",
+  "title": "The War of the Worlds",
+  "author": "H. G. Wells",
+  "category": "Science Fiction",
+  "year": 1898,
+  "description": "Cylinders land in Surrey and the greatest empire on earth is obsolete by Tuesday. Written as reportage, which is what still makes it frightening.",
+  "shelves": [
+    "scifi"
+  ],
+  "featured": false,
+  "file": "books/the-war-of-the-worlds/book.txt",
+  "cover": "books/the-war-of-the-worlds/cover.jpg",
+  "wordCount": 60075,
+  "charCount": 337163,
+  "estimatedReadingTime": 240,
+  "estimatedListeningTime": 334,
+  "bodyOffset": 1023,
+  "snippet": "No one would have believed in the last years of the nineteenth century that this world was being watched keenly and closely by intelligence…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/36",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/36.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/36/pg36.cover.medium.jpg",
+    "gutenbergId": 36,
+    "gutenbergTitle": "The war of the worlds",
+    "gutenbergAuthor": "H. G. Wells",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "ec2c05fd094b6f71"
+  }
+}

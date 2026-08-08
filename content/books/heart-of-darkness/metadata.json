@@ -1,0 +1,34 @@
+{
+  "id": "heart-of-darkness",
+  "title": "Heart of Darkness",
+  "author": "Joseph Conrad",
+  "category": "Literary Fiction",
+  "year": 1899,
+  "description": "A steamboat goes up the Congo to collect a man who has stopped pretending. Short, dense, and permanently unsettling.",
+  "shelves": [
+    "classics",
+    "sitting"
+  ],
+  "featured": false,
+  "file": "books/heart-of-darkness/book.txt",
+  "cover": null,
+  "wordCount": 37917,
+  "charCount": 209839,
+  "estimatedReadingTime": 152,
+  "estimatedListeningTime": 211,
+  "bodyOffset": 60,
+  "snippet": "The Nellie, a cruising yawl, swung to her anchor without a flutter of the sails, and was at rest. The flood had made, the wind was nearly c…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/219",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/219.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/219/pg219.cover.medium.jpg",
+    "gutenbergId": 219,
+    "gutenbergTitle": "Heart of Darkness",
+    "gutenbergAuthor": "Joseph Conrad",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "52e85b686b63c51c"
+  }
+}

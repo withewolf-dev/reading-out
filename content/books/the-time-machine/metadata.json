@@ -1,0 +1,35 @@
+{
+  "id": "the-time-machine",
+  "title": "The Time Machine",
+  "author": "H. G. Wells",
+  "category": "Science Fiction",
+  "year": 1895,
+  "description": "A dinner-party guest returns filthy and hungry with a story about the year 802,701. Ninety minutes long, and it invented an entire genre.",
+  "shelves": [
+    "featured",
+    "scifi",
+    "sitting"
+  ],
+  "featured": true,
+  "file": "books/the-time-machine/book.txt",
+  "cover": "books/the-time-machine/cover.jpg",
+  "wordCount": 32454,
+  "charCount": 179534,
+  "estimatedReadingTime": 130,
+  "estimatedListeningTime": 180,
+  "bodyOffset": 441,
+  "snippet": "The Time Traveller (for so it will be convenient to speak of him) was expounding a recondite matter to us. His grey eyes shone and twinkled…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/35",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/35.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/35/pg35.cover.medium.jpg",
+    "gutenbergId": 35,
+    "gutenbergTitle": "The Time Machine",
+    "gutenbergAuthor": "H. G. Wells",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "bb5a4789999857bd"
+  }
+}

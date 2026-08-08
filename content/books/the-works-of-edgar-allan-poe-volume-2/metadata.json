@@ -1,0 +1,35 @@
+{
+  "id": "the-works-of-edgar-allan-poe-volume-2",
+  "title": "The Works of Edgar Allan Poe, Volume 2",
+  "author": "Edgar Allan Poe",
+  "category": "Short Stories",
+  "year": 1845,
+  "description": "The famous ones, in one volume: The Fall of the House of Usher, The Masque of the Red Death, The Cask of Amontillado, The Pit and the Pendulum. Twenty minutes each.",
+  "shelves": [
+    "stories",
+    "gothic",
+    "mystery"
+  ],
+  "featured": false,
+  "file": "books/the-works-of-edgar-allan-poe-volume-2/book.txt",
+  "cover": null,
+  "wordCount": 95043,
+  "charCount": 547240,
+  "estimatedReadingTime": 380,
+  "estimatedListeningTime": 528,
+  "bodyOffset": 806,
+  "snippet": "At Paris, just after dark one gusty evening in the autumn of 18-, I was enjoying the twofold luxury of meditation and a meerschaum, in comp…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/2148",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/2148.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/2148/pg2148.cover.medium.jpg",
+    "gutenbergId": 2148,
+    "gutenbergTitle": "The Works of Edgar Allan Poe — Volume 2",
+    "gutenbergAuthor": "Edgar Allan Poe",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "16f6fc13da0edfdb"
+  }
+}

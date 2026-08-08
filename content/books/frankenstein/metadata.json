@@ -1,0 +1,35 @@
+{
+  "id": "frankenstein",
+  "title": "Frankenstein",
+  "author": "Mary Shelley",
+  "category": "Gothic",
+  "year": 1818,
+  "description": "A student builds a man and then runs from him. Written at nineteen, and still the sharpest thing anyone has said about making something you cannot take back.",
+  "shelves": [
+    "gothic",
+    "scifi",
+    "classics"
+  ],
+  "featured": false,
+  "file": "books/frankenstein/book.txt",
+  "cover": "books/frankenstein/cover.jpg",
+  "wordCount": 75042,
+  "charCount": 418998,
+  "estimatedReadingTime": 300,
+  "estimatedListeningTime": 417,
+  "bodyOffset": 385,
+  "snippet": "You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodi…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/84",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/84.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/84/pg84.cover.medium.jpg",
+    "gutenbergId": 84,
+    "gutenbergTitle": "Frankenstein; or, the modern prometheus",
+    "gutenbergAuthor": "Mary Wollstonecraft Shelley",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "9d5b0c1eaecd5f8c"
+  }
+}

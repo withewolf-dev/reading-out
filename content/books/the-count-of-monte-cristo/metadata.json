@@ -1,0 +1,34 @@
+{
+  "id": "the-count-of-monte-cristo",
+  "title": "The Count of Monte Cristo",
+  "author": "Alexandre Dumas",
+  "category": "Adventure",
+  "year": 1844,
+  "description": "Wrongful imprisonment, a fortune, and revenge served across a thousand pages. The longest book in this library, and the fastest-moving.",
+  "shelves": [
+    "adventure",
+    "long"
+  ],
+  "featured": false,
+  "file": "books/the-count-of-monte-cristo/book.txt",
+  "cover": "books/the-count-of-monte-cristo/cover.jpg",
+  "wordCount": 460939,
+  "charCount": 2622704,
+  "estimatedReadingTime": 1844,
+  "estimatedListeningTime": 2561,
+  "bodyOffset": 3561,
+  "snippet": "On the 24th of February, 1815, the look-out at Notre-Dame de la Garde signalled the three-master, the Pharaon from Smyrna, Trieste, and Nap…",
+  "source": {
+    "name": "Project Gutenberg",
+    "url": "https://www.gutenberg.org/ebooks/1184",
+    "downloadUrl": "https://www.gutenberg.org/ebooks/1184.txt.utf-8",
+    "coverUrl": "https://www.gutenberg.org/cache/epub/1184/pg1184.cover.medium.jpg",
+    "gutenbergId": 1184,
+    "gutenbergTitle": "The Count of Monte Cristo",
+    "gutenbergAuthor": "Alexandre Dumas",
+    "license": "Public Domain (United States)",
+    "licenseNote": "Public domain in the United States. Sourced from Project Gutenberg, which places no restrictions on public-domain works once the Project Gutenberg header, footer and trademark references are removed (PG Licence §1.E.1–1.E.7).",
+    "retrieved": "2026-08-08",
+    "sha256": "af48d0af012cc2f3"
+  }
+}

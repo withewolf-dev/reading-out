@@ -12,47 +12,65 @@ export type ReadingRow = {
   created_at: number;
   last_opened_at: number | null;
   finished_at: number | null;
+  /** Set for a book from the bundled library; null for anything imported. */
+  catalog_id: string | null;
 };
 
 export type NewReading = {
   title: string;
   text: string;
   coverPath?: string | null;
+  catalogId?: string | null;
 };
 
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 export async function migrate(db: SQLiteDatabase) {
   await db.execAsync('PRAGMA journal_mode = WAL;');
   const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
-  const version = row?.user_version ?? 0;
+  let version = row?.user_version ?? 0;
   if (version >= DATABASE_VERSION) return;
 
-  await db.execAsync(`
-    CREATE TABLE IF NOT EXISTS readings (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      text TEXT NOT NULL,
-      cover_path TEXT,
-      progress_offset INTEGER NOT NULL DEFAULT 0,
-      char_count INTEGER NOT NULL DEFAULT 0,
-      word_count INTEGER NOT NULL DEFAULT 0,
-      snippet TEXT NOT NULL DEFAULT '',
-      created_at INTEGER NOT NULL,
-      last_opened_at INTEGER,
-      finished_at INTEGER
-    );
-    CREATE INDEX IF NOT EXISTS readings_last_opened ON readings (last_opened_at DESC);
-    CREATE TABLE IF NOT EXISTS settings (
-      key TEXT PRIMARY KEY NOT NULL,
-      value TEXT NOT NULL
-    );
-  `);
+  if (version < 1) {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS readings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        text TEXT NOT NULL,
+        cover_path TEXT,
+        progress_offset INTEGER NOT NULL DEFAULT 0,
+        char_count INTEGER NOT NULL DEFAULT 0,
+        word_count INTEGER NOT NULL DEFAULT 0,
+        snippet TEXT NOT NULL DEFAULT '',
+        created_at INTEGER NOT NULL,
+        last_opened_at INTEGER,
+        finished_at INTEGER
+      );
+      CREATE INDEX IF NOT EXISTS readings_last_opened ON readings (last_opened_at DESC);
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY NOT NULL,
+        value TEXT NOT NULL
+      );
+    `);
+    version = 1;
+  }
+
+  if (version < 2) {
+    // A bundled book becomes a row only when it is first opened, so this links
+    // the row back to its catalogue entry. SQLite lets a UNIQUE index hold any
+    // number of NULLs, which is exactly what imported readings need.
+    await db.execAsync(`
+      ALTER TABLE readings ADD COLUMN catalog_id TEXT;
+      CREATE UNIQUE INDEX IF NOT EXISTS readings_catalog ON readings (catalog_id);
+    `);
+    version = 2;
+  }
+
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
 const LIST_COLUMNS = `id, title, cover_path, progress_offset, char_count,
-  word_count, snippet, created_at, last_opened_at, finished_at`;
+  word_count, snippet, created_at, last_opened_at, finished_at, catalog_id`;
 
 export function listReadings(db: SQLiteDatabase) {
   return db.getAllAsync<ReadingRow>(
@@ -71,17 +89,25 @@ export async function getReadingText(db: SQLiteDatabase, id: number): Promise<st
   return row?.text ?? '';
 }
 
+export function getReadingByCatalogId(db: SQLiteDatabase, catalogId: string) {
+  return db.getFirstAsync<ReadingRow>(
+    `SELECT ${LIST_COLUMNS} FROM readings WHERE catalog_id = ?`,
+    catalogId
+  );
+}
+
 export async function insertReading(
   db: SQLiteDatabase,
   reading: NewReading,
   derived: { charCount: number; wordCount: number; snippet: string }
 ): Promise<number> {
   const result = await db.runAsync(
-    `INSERT INTO readings (title, text, cover_path, char_count, word_count, snippet, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO readings (title, text, cover_path, catalog_id, char_count, word_count, snippet, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     reading.title,
     reading.text,
     reading.coverPath ?? null,
+    reading.catalogId ?? null,
     derived.charCount,
     derived.wordCount,
     derived.snippet,
@@ -123,9 +149,4 @@ export function putSetting(db: SQLiteDatabase, key: string, value: string) {
     key,
     value
   );
-}
-
-export function progressFraction(row: Pick<ReadingRow, 'progress_offset' | 'char_count'>): number {
-  if (row.char_count <= 0) return 0;
-  return Math.min(1, Math.max(0, row.progress_offset / row.char_count));
 }
