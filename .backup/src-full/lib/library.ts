@@ -1,10 +1,7 @@
 import { Asset } from 'expo-asset';
-import { File } from 'expo-file-system';
-import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { CATALOG, catalogBook, SHELVES, type CatalogBook, type Shelf } from '@/lib/catalog';
-import { getReadingByCatalogId, getReadingText, insertReading, type ReadingRow } from '@/db';
-import { countWords } from '@/lib/text';
+import { type ReadingRow } from '@/db';
 
 /**
  * The bundled library, and how it meets what is already in the database.
@@ -112,12 +109,6 @@ export function buildLibrary(rows: ReadingRow[]): Library {
  * server until `downloadAsync` caches it; in a release build it is already in
  * the app bundle and `localUri` is set from the start.
  */
-export async function loadBookText(book: CatalogBook): Promise<string> {
-  const asset = Asset.fromModule(book.text);
-  if (!asset.localUri) await asset.downloadAsync();
-  const uri = asset.localUri ?? asset.uri;
-  return new File(uri).text();
-}
 
 /** A file:// path to a bundled cover — what the native reader needs to tint the page. */
 export async function loadCoverUri(book: CatalogBook): Promise<string | null> {
@@ -135,23 +126,6 @@ export async function loadCoverUri(book: CatalogBook): Promise<string | null> {
  * The row id and text for a bundled book, creating the row on first open. This
  * is the only place a catalogue entry turns into a reading.
  */
-export async function ensureReading(
-  db: SQLiteDatabase,
-  book: CatalogBook
-): Promise<{ id: number; text: string }> {
-  const existing = await getReadingByCatalogId(db, book.id);
-  if (existing) return { id: existing.id, text: await getReadingText(db, existing.id) };
-
-  const text = await loadBookText(book);
-  const id = await insertReading(
-    db,
-    { title: book.title, text, catalogId: book.id },
-    // The snippet is the book's first real sentence, chosen at build time —
-    // better than the title page `makeSnippet` would find here.
-    { charCount: text.length, wordCount: countWords(text), snippet: book.snippet }
-  );
-  return { id, text };
-}
 
 export function progressFraction(entry: LibraryEntry): number {
   if (entry.charCount <= 0) return 0;
