@@ -53,7 +53,7 @@ export default function ComposerScreen() {
         placeholder="Paste anything here."
         placeholderTextColor={Colors.faint}
         style={styles.input}
-        keyboardAppearance="dark"
+        keyboardAppearance="light"
         textAlignVertical="top"
       />
       <Text style={styles.hint}>

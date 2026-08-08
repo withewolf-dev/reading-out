@@ -26,7 +26,7 @@ export default function ReaderScreen() {
 
   const [reading, setReading] = useState<ReadingRow | null>(null);
   const [text, setText] = useState<string | null>(null);
-  const [tint, setTint] = useState({ hue: 210, saturation: 0.55 });
+  const [tint, setTint] = useState({ hue: 210, saturation: 0.1 });
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function ReaderScreen() {
 
   // The page, the nav bar and the dock are one continuous field of the cover's
   // colour — Apple Podcasts floods the whole screen rather than framing it (§15).
-  const pageTop = tintedSurface(tint.hue, tint.saturation, 0.3);
+  const pageTop = tintedSurface(tint.hue, tint.saturation, 0.99);
 
   return (
     <View style={[styles.screen, { backgroundColor: pageTop }]}>

@@ -15,7 +15,7 @@ export default function RootLayout() {
       onInit={migrate}
       useSuspense={false}
       options={{ useNewConnection: false }}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <PlaybackBridge />
       <Stack
         screenOptions={{
@@ -25,7 +25,10 @@ export default function RootLayout() {
           headerShadowVisible: false,
           contentStyle: { backgroundColor: Colors.ground },
         }}>
-        <Stack.Screen name="index" options={{ title: 'Library', headerLargeTitle: true }} />
+        {/* The library draws its own bar: iOS always drops a large title onto a
+            second line below the toolbar, and we want the title and the icons
+            on one row. */}
+        <Stack.Screen name="index" options={{ title: 'Library', headerShown: false }} />
         <Stack.Screen name="reader/[id]" options={{ title: '', headerBackTitle: 'Library' }} />
         <Stack.Screen
           name="composer"

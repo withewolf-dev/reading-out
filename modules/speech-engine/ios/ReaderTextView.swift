@@ -46,7 +46,7 @@ final class ReaderModel: ObservableObject {
     /// Set from the title's colour when a reading has no real cover, and replaced
     /// by the artwork's own dominant hue when it does.
     @Published var hue: Double = 210
-    @Published var saturation: Double = 0.55
+    @Published var saturation: Double = 0.10
 
     /// Where to park the scroll on first load (resume position).
     var startOffset = 0
@@ -101,7 +101,7 @@ final class ReaderModel: ObservableObject {
         hue = Double(h) * 360
         // Book covers are often near-grey; floor the saturation so the page still
         // reads as tinted rather than as flat charcoal.
-        saturation = max(0.28, min(0.62, Double(s)))
+        saturation = max(0.05, min(0.16, Double(s)))
         onTint?(hue, saturation)
     }
 
@@ -247,7 +247,7 @@ struct ReaderTextView: View {
                             .background(.regularMaterial, in: Capsule())
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 150)
                 }
@@ -268,8 +268,8 @@ struct ReaderTint: View {
     var body: some View {
         LinearGradient(
             colors: [
-                Color(hue: hue / 360, saturation: saturation, brightness: 0.30),
-                Color(hue: hue / 360, saturation: saturation * 1.05, brightness: 0.17),
+                Color(hue: hue / 360, saturation: saturation, brightness: 0.99),
+                Color(hue: hue / 360, saturation: saturation * 1.3, brightness: 0.94),
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -286,10 +286,10 @@ enum ParagraphPhase {
 
     var textOpacity: Double {
         switch self {
-        case .idle: return 1
-        case .past: return 0.38
-        case .current: return 1
-        case .upcoming: return 0.55
+        case .idle: return 0.92
+        case .past: return 0.32
+        case .current: return 0.92
+        case .upcoming: return 0.52
         }
     }
 }
@@ -314,7 +314,7 @@ private struct ParagraphText: View, Equatable {
             .padding(.vertical, phase == .current ? 10 : 0)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white.opacity(phase == .current ? 0.07 : 0))
+                    .fill(Color.black.opacity(phase == .current ? 0.05 : 0))
             )
             .padding(.horizontal, phase == .current ? -12 : 0)
             .animation(.easeOut(duration: 0.2), value: phase)
@@ -328,8 +328,8 @@ private struct ParagraphText: View, Equatable {
         var result = plain(prefix)
         var word = AttributedString(highlighted)
         // accent at 0.28 over the text (§18)
-        word.backgroundColor = Color(red: 10 / 255, green: 132 / 255, blue: 1).opacity(0.28)
-        word.foregroundColor = .white
+        word.backgroundColor = Color(red: 0, green: 122 / 255, blue: 1).opacity(0.22)
+        word.foregroundColor = .black
         result += word
         result += plain(suffix)
         return result
@@ -337,7 +337,7 @@ private struct ParagraphText: View, Equatable {
 
     private func plain(_ string: String) -> AttributedString {
         var result = AttributedString(string)
-        result.foregroundColor = .white.opacity(phase.textOpacity)
+        result.foregroundColor = .black.opacity(phase.textOpacity)
         return result
     }
 }

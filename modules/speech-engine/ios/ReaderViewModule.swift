@@ -42,7 +42,7 @@ public final class ReaderTextExpoView: ExpoView {
     public required init(appContext: AppContext? = nil) {
         super.init(appContext: appContext)
         clipsToBounds = true
-        backgroundColor = .black
+        backgroundColor = .white
 
         host.view.backgroundColor = .clear
         addSubview(host.view)

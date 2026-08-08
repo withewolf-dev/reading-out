@@ -2,23 +2,33 @@ import { Platform } from 'react-native';
 
 /** Design tokens — exact values from PRODUCT.md §18. Dark only, by design. */
 
+/**
+ * Light theme. This reverses §18's dark-first, artwork-led direction, so the
+ * ink scale is black-on-white rather than white-on-black; the cover tint in the
+ * reader became a pale wash instead of a deep field for the same reason.
+ */
 export const Colors = {
-  ground: '#000000',
-  /** white-opacity scale */
-  primary: 'rgba(255,255,255,1)',
-  secondary: 'rgba(255,255,255,0.78)',
-  inactive: 'rgba(255,255,255,0.55)',
-  faint: 'rgba(255,255,255,0.32)',
-  highlightFill: 'rgba(255,255,255,0.12)',
-  stroke: 'rgba(255,255,255,0.08)',
-  cardTop: 'rgba(255,255,255,0.10)',
-  cardBottom: 'rgba(255,255,255,0.03)',
-  trackEmpty: 'rgba(255,255,255,0.17)',
-  trackFill: 'rgba(255,255,255,0.92)',
-  accent: '#0A84FF',
-  /** word highlight: accent at 0.28 over the text */
-  wordHighlight: 'rgba(10,132,255,0.28)',
-  danger: '#FF453A',
+  ground: '#FFFFFF',
+  /** ink scale */
+  primary: 'rgba(0,0,0,0.92)',
+  secondary: 'rgba(0,0,0,0.62)',
+  inactive: 'rgba(0,0,0,0.45)',
+  faint: 'rgba(0,0,0,0.26)',
+  /** filled surfaces: cards, chips, wells */
+  surface: 'rgba(0,0,0,0.045)',
+  surfaceStrong: 'rgba(0,0,0,0.08)',
+  highlightFill: 'rgba(0,0,0,0.06)',
+  stroke: 'rgba(0,0,0,0.10)',
+  cardTop: 'rgba(0,0,0,0.05)',
+  cardBottom: 'rgba(0,0,0,0.02)',
+  trackEmpty: 'rgba(0,0,0,0.13)',
+  trackFill: 'rgba(0,0,0,0.72)',
+  accent: '#007AFF',
+  /** word highlight: accent behind the spoken word */
+  wordHighlight: 'rgba(0,122,255,0.22)',
+  /** dims the screen behind a blocking state */
+  scrim: 'rgba(0,0,0,0.28)',
+  danger: '#FF3B30',
 } as const;
 
 export const Radius = {

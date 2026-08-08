@@ -20,13 +20,13 @@ type Props = {
 export function GlassPanel({ tintColor, style, children }: Props) {
   if (isLiquidGlassAvailable()) {
     return (
-      <GlassView glassEffectStyle="regular" colorScheme="dark" tintColor={tintColor} style={style}>
+      <GlassView glassEffectStyle="regular" colorScheme="light" tintColor={tintColor} style={style}>
         {children}
       </GlassView>
     );
   }
   return (
-    <BlurView tint="systemChromeMaterialDark" intensity={100} style={style}>
+    <BlurView tint="systemChromeMaterialLight" intensity={100} style={style}>
       {children}
     </BlurView>
   );

@@ -1,9 +1,10 @@
 import * as Haptics from 'expo-haptics';
-import { Stack, useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ContinueCard } from '@/components/continue-card';
 import { MiniPlayer } from '@/components/mini-player';
@@ -30,6 +31,7 @@ export default function LibraryScreen() {
   const { rate } = usePrefs();
   const [readings, setReadings] = useState<ReadingRow[] | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const insets = useSafeAreaInsets();
 
   const reload = useCallback(() => {
     listReadings(db).then(setReadings).catch(() => setReadings([]));
@@ -120,21 +122,19 @@ export default function LibraryScreen() {
 
   return (
     <View style={styles.screen}>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <View style={styles.headerButtons}>
-              <HeaderIcon
-                symbol="plus"
-                label="Import a file"
-                onPress={importFiles}
-                onLongPress={() => router.push('/composer')}
-              />
-              <HeaderIcon symbol="gearshape" label="Voice and text settings" onPress={() => router.push('/settings')} />
-            </View>
-          ),
-        }}
-      />
+      {/* Title and toolbar on one row. */}
+      <View style={[styles.bar, { paddingTop: insets.top + Space.s }]}>
+        <Text style={styles.barTitle}>Library</Text>
+        <View style={styles.headerButtons}>
+          <HeaderIcon
+            symbol="plus"
+            label="Import a file"
+            onPress={importFiles}
+            onLongPress={() => router.push('/composer')}
+          />
+          <HeaderIcon symbol="gearshape" label="Voice and text settings" onPress={() => router.push('/settings')} />
+        </View>
+      </View>
 
       {readings == null ? null : readings.length === 0 ? (
         <EmptyLibrary
@@ -147,7 +147,6 @@ export default function LibraryScreen() {
         />
       ) : (
         <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}>
           {hero ? (
@@ -258,6 +257,14 @@ function Door({ label, onPress, primary }: { label: string; onPress: () => void;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.ground },
+  bar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Screen.margin,
+    paddingBottom: Space.ms,
+  },
+  barTitle: { fontFamily: Fonts.sans, fontSize: 34, fontWeight: '700', color: Colors.primary },
   content: { paddingTop: Space.s, paddingBottom: 120, gap: Space.xl },
   headerButtons: {
     flexDirection: 'row',
@@ -287,7 +294,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.stroke,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: Colors.surface,
   },
   doorPrimary: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   doorLabel: { fontFamily: Fonts.sans, fontSize: 16, color: Colors.primary },
@@ -300,13 +307,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: Colors.scrim,
   },
   busyText: {
     fontFamily: Fonts.sans,
     fontSize: 15,
     color: Colors.primary,
-    backgroundColor: 'rgba(40,40,42,0.98)',
+    backgroundColor: Colors.ground,
     paddingHorizontal: Space.xl,
     paddingVertical: Space.l,
     borderRadius: Radius.card,

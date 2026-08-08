@@ -55,7 +55,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: Fonts.serif,
-    color: Colors.primary,
+    // Artwork is its own surface: a saturated gradient, dark in either theme.
+    // This text must not follow the app's ink scale or it turns black on green.
+    color: 'rgba(255,255,255,0.96)',
     lineHeight: undefined,
   },
 });
