@@ -259,7 +259,14 @@ function Door({ label, onPress, primary }: { label: string; onPress: () => void;
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.ground },
   content: { paddingTop: Space.s, paddingBottom: 120, gap: Space.xl },
-  headerButtons: { flexDirection: 'row', gap: Space.xl, alignItems: 'center' },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // Roomy: iOS 26 wraps these in a glass pill, and tight icons make it look
+    // cramped against its own capsule.
+    gap: 30,
+    paddingHorizontal: 6,
+  },
   sectionTitle: {
     fontFamily: Fonts.sans,
     fontSize: 15,
