@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -5,10 +6,9 @@ import { CATALOG } from '@/lib/catalog';
 import { mark, markStart } from '@/lib/perf';
 
 /**
- * A plain list of the 50 catalogue titles. No images, no gradients, no theme,
- * no horizontal shelves, no components — one `Text` per row. If tapping is fast
- * here but slow on the real library, the cost was in drawing those cards, not
- * in navigating.
+ * The plain list, plus each book's cover. Still no gradients, no theme, no
+ * horizontal shelves, no components — the only thing added over the 5-14 ms
+ * baseline is 50 images being resolved, decoded and drawn.
  */
 export default function LibraryScreen() {
   const router = useRouter();
@@ -25,10 +25,18 @@ export default function LibraryScreen() {
             router.push(`/reader/${item.id}`);
             mark('push returned');
           }}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.meta}>
-            {item.author} · {item.minutes} min
-          </Text>
+          {item.cover != null ? (
+            <Image source={item.cover} style={styles.cover} contentFit="cover" />
+          ) : (
+            // Nine of the fifty have no cover in the bundle.
+            <View style={[styles.cover, styles.coverEmpty]} />
+          )}
+          <View style={styles.text}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.meta}>
+              {item.author} · {item.minutes} min
+            </Text>
+          </View>
         </Pressable>
       )}
       ItemSeparatorComponent={() => <View style={styles.rule} />}
@@ -37,8 +45,11 @@ export default function LibraryScreen() {
 }
 
 const styles = StyleSheet.create({
-  row: { paddingHorizontal: 20, paddingVertical: 14 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, paddingVertical: 10 },
+  cover: { width: 44, height: 64, borderRadius: 4, backgroundColor: '#E5E5EA' },
+  coverEmpty: { backgroundColor: '#D1D1D6' },
+  text: { flex: 1 },
   title: { fontSize: 17, color: '#000000' },
   meta: { fontSize: 13, color: '#8A8A8E', marginTop: 2 },
-  rule: { height: StyleSheet.hairlineWidth, backgroundColor: '#D1D1D6', marginLeft: 20 },
+  rule: { height: StyleSheet.hairlineWidth, backgroundColor: '#D1D1D6', marginLeft: 76 },
 });
