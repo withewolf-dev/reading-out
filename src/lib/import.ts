@@ -13,7 +13,6 @@ export type ImportedBook = {
   /** file:// path to the saved text, for opening it again later. */
   textUri: string;
   coverPath: string | null;
-  importedAt: number;
 };
 
 /**
@@ -33,49 +32,6 @@ export function takeStagedText(id: string): string | null {
   return text;
 }
 
-/**
- * The imported books, as a small JSON file beside the texts themselves.
- *
- * A manifest rather than a SQLite table: the books already live on disk as
- * files, and a row per book would mean carrying the whole storage layer back
- * just to remember thirty bytes of metadata.
- */
-function manifestFile(): File {
-  return new File(importsDirectory(), 'index.json');
-}
-
-export async function listImports(): Promise<ImportedBook[]> {
-  const file = manifestFile();
-  if (!file.exists) return [];
-  try {
-    const parsed = JSON.parse(await file.text()) as ImportedBook[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-async function remember(book: ImportedBook): Promise<void> {
-  // Re-importing the same file replaces its entry rather than doubling it.
-  const rest = (await listImports()).filter((b) => b.id !== book.id);
-  const file = manifestFile();
-  if (file.exists) file.delete();
-  file.create();
-  file.write(JSON.stringify([book, ...rest]));
-}
-
-/** Forget an imported book, and delete the text it was reading from. */
-export async function removeImport(id: string): Promise<void> {
-  const rest = (await listImports()).filter((b) => b.id !== id);
-  const file = manifestFile();
-  if (file.exists) file.delete();
-  file.create();
-  file.write(JSON.stringify(rest));
-
-  const text = new File(importsDirectory(), `${id}.txt`);
-  if (text.exists) text.delete();
-}
-
 function importsDirectory(): Directory {
   const dir = new Directory(Paths.document, 'imports');
   if (!dir.exists) dir.create({ intermediates: true });
@@ -90,6 +46,9 @@ function idFor(name: string): string {
 
 /**
  * Pick a PDF or text file and turn it into something the reader can open.
+ *
+ * Storage is the caller's business: this returns a descriptor and the caller
+ * writes the row.
  *
  * `onStage` fires as each step begins so the caller can say what is happening.
  * There is no percentage to report: extraction happens inside one native call
@@ -133,15 +92,11 @@ export async function importBook(
   file.create();
   file.write(text);
 
-  const book: ImportedBook = {
+  return {
     id,
     title: imported.title || asset.name || 'Untitled',
     charCount: text.length,
     textUri: file.uri,
     coverPath: imported.coverPath ?? null,
-    importedAt: Date.now(),
   };
-
-  await remember(book);
-  return book;
 }

@@ -6,6 +6,8 @@ import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-na
 import { ProgressTrack } from '@/components/progress-track';
 import { progressFraction, type LibraryEntry } from '@/lib/library';
 import { percentLabel, remainingLabel } from '@/lib/text';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { coverColors, Fonts, Screen, Space } from '@/theme';
 
 type Props = {
@@ -18,14 +20,15 @@ type Props = {
 };
 
 /**
- * The book you are in the middle of, at full height. The cover fills the card
- * and a black gradient carries the title, the remaining time and the transport
- * — the same treatment as a shelf card, sized as the thing the screen is for.
+ * The book you are in the middle of, running the full width of the screen and
+ * up behind the status bar. Nothing frames it: the artwork is the top of the
+ * app, and the toolbar sits on it rather than above it.
  *
- * (This is a deliberate departure from §15's "compact card at ~120pt".)
+ * (A deliberate departure from §15's "compact card at ~120pt" — the reference
+ * is a store shelf; this screen is one reader's own book.)
  *
- * Height follows the cover's own 1:1.42 proportion rather than a fixed number,
- * so real artwork fills the card without odd cropping on any screen width.
+ * Height follows the cover's 1:1.42 proportion, measured on the full screen
+ * width, plus whatever the status bar needs.
  */
 const CARD_ASPECT = 1.42;
 
@@ -47,7 +50,10 @@ export function ContinueCard({
   const finished = entry.finished || fraction >= 1;
   const [gradientTop, gradientBottom] = coverColors(entry.title);
   const { width } = useWindowDimensions();
-  const height = Math.round((width - Screen.margin * 2) * CARD_ASPECT);
+  const insets = useSafeAreaInsets();
+  // Full-bleed, so the aspect is taken on the whole width; the status bar's
+  // height is added on top rather than eating into the artwork.
+  const height = Math.round(width * CARD_ASPECT * 0.70) + insets.top;
 
   const meta = finished
     ? 'Finished'
@@ -115,9 +121,8 @@ export function ContinueCard({
 }
 
 const styles = StyleSheet.create({
-  press: { marginHorizontal: Screen.margin },
+  press: {},
   card: {
-    borderRadius: 24,
     backgroundColor: '#111',
     overflow: 'hidden',
   },

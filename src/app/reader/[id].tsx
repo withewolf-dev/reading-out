@@ -12,8 +12,8 @@ import { ReaderView } from '../../../modules/speech-engine/src/ReaderView';
 import { BookCover } from '@/components/book-cover';
 import { ProgressTrack } from '@/components/progress-track';
 import { ReadingArtwork } from '@/components/reading-artwork';
-import { putSetting } from '@/db';
-import { CATALOG, catalogBook } from '@/lib/catalog';
+import { getReading, openBundled, putSetting, touchOpened, type ReadingRow } from '@/db';
+import { catalogBook } from '@/lib/catalog';
 import { takeStagedText } from '@/lib/import';
 import { player, prefs, RATE, usePlayer, usePrefs } from '@/speech/engine';
 import { Colors, coverHue, Fonts, Radius, Screen, Space, tintedSurface } from '@/theme';
@@ -31,12 +31,11 @@ const SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
  */
 export default function ReaderScreen() {
   const params = useLocalSearchParams<{
+    /** A row id, or a catalogue id for a book that has never been opened. */
     id: string;
+    /** Set straight after an import, to claim the text already in memory. */
+    staged?: string;
     title?: string;
-    cover?: string;
-    text?: string;
-    bodyOffset?: string;
-    /** file:// path to an imported book's text; absent for bundled ones. */
     textUri?: string;
     coverUri?: string;
   }>();
@@ -47,21 +46,9 @@ export default function ReaderScreen() {
   const { fontSize, rate } = usePrefs();
   const insets = useSafeAreaInsets();
 
-  // Everything the opening frame needs rides in on the route; the catalogue is
-  // only consulted for what does not (author, char count).
-  const book = catalogBook(params.id);
-  const title = params.title ?? book?.title ?? '';
-  const cover = params.cover ? Number(params.cover) : (book?.cover ?? null);
-  const textAsset = params.text ? Number(params.text) : (book?.text ?? null);
-  const bodyOffset = params.bodyOffset ? Number(params.bodyOffset) : (book?.bodyOffset ?? 0);
+  const rowIdParam = /^\d+$/.test(params.id) ? Number(params.id) : null;
 
-  // The engine is keyed by number. With no rows any more, a book's position in
-  // the catalogue is the stable id — good for a session, not across launches.
-  // Bundled books key off catalogue position; an import has none, so it gets a
-  // slot above the catalogue instead.
-  const readingId =
-    book != null ? CATALOG.indexOf(book) + 1 : CATALOG.length + 1;
-
+  const [reading, setReading] = useState<ReadingRow | null>(null);
   const [text, setText] = useState<string | null>(null);
   const [coverUri, setCoverUri] = useState<string | null>(null);
   const [tint, setTint] = useState({ hue: 210, saturation: 0.1 });
@@ -74,35 +61,57 @@ export default function ReaderScreen() {
     // back the whole text, so opening it costs nothing at all. Writing it out
     // and reading it straight back would be the same wasted round trip that
     // made opening a bundled book slow.
-    const stagedText = params.textUri ? takeStagedText(params.id) : null;
+    const stagedText = params.staged ? takeStagedText(params.staged) : null;
     if (stagedText != null) {
       if (params.coverUri) setCoverUri(params.coverUri);
       setText(stagedText);
-      return;
     }
 
     (async () => {
       try {
-        if (params.coverUri) {
-          if (!cancelled) setCoverUri(params.coverUri);
-        } else if (cover != null && Number.isFinite(cover)) {
-          const art = Asset.fromModule(cover);
+        // A row id opens an existing reading; a catalogue id makes one.
+        const row =
+          rowIdParam != null
+            ? await getReading(db, rowIdParam)
+            : await (async () => {
+                const entry = catalogBook(params.id);
+                if (!entry) return null;
+                return openBundled(db, {
+                  id: entry.id,
+                  title: entry.title,
+                  charCount: entry.charCount,
+                  wordCount: entry.wordCount,
+                  snippet: entry.snippet,
+                });
+              })();
+
+        if (cancelled) return;
+        if (!row) throw new Error('unknown reading');
+        setReading(row);
+        if (rowIdParam != null) touchOpened(db, row.id).catch(() => {});
+
+        const entry = catalogBook(row.catalog_id);
+        if (row.cover_path) {
+          if (!cancelled) setCoverUri(row.cover_path);
+        } else if (entry?.cover != null) {
+          const art = Asset.fromModule(entry.cover);
           if (!art.localUri) await art.downloadAsync();
           if (!cancelled) setCoverUri(art.localUri ?? art.uri);
         }
 
+        if (stagedText != null) return; // already in hand
+
         // An imported book lives on disk; a bundled one is a Metro asset.
-        let uri = params.textUri ?? null;
+        let uri = row.text_uri;
         if (uri == null) {
-          if (textAsset == null || !Number.isFinite(textAsset)) return;
-          const asset = Asset.fromModule(textAsset);
+          if (!entry) throw new Error('no text for that reading');
+          const asset = Asset.fromModule(entry.text);
           if (!asset.localUri) await asset.downloadAsync();
           uri = asset.localUri ?? asset.uri;
         }
 
         const body = await new File(uri).text();
         if (cancelled) return;
-
         setText(body);
       } catch {
         if (!cancelled) setFailed(true);
@@ -112,7 +121,15 @@ export default function ReaderScreen() {
     return () => {
       cancelled = true;
     };
-  }, [cover, params.coverUri, params.id, params.textUri, textAsset]);
+  }, [db, params.coverUri, params.id, params.staged, rowIdParam]);
+
+  const book = catalogBook(reading?.catalog_id);
+  const title = reading?.title ?? params.title ?? '';
+  const readingId = reading?.id ?? -1;
+  // A book that has never been played starts at its first chapter rather than
+  // its title page; once there is real progress, that is all that matters.
+  const openingOffset =
+    (reading?.progress_offset ?? 0) > 0 ? reading!.progress_offset : (book?.bodyOffset ?? 0);
 
   const isCurrent = state.readingId === readingId;
   const playing = isCurrent && state.status === 'speaking';
@@ -135,8 +152,8 @@ export default function ReaderScreen() {
     if (text == null) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (player.isLoaded(readingId)) player.toggle();
-    else player.play({ id: readingId, title, text }, bodyOffset);
-  }, [bodyOffset, readingId, text, title]);
+    else player.play({ id: readingId, title, text }, openingOffset);
+  }, [openingOffset, readingId, text, title]);
 
   const cycleSpeed = useCallback(() => {
     const current = Math.round((rate / RATE.default) * 100) / 100;
@@ -150,9 +167,10 @@ export default function ReaderScreen() {
   const speedLabel = `${Math.round((rate / RATE.default) * 100) / 100}×`;
   const multiplier = rate / RATE.default;
 
-  // Nothing is persisted any more, so position comes from the engine alone.
-  const offset = isCurrent ? state.offset : 0;
-  const total = book?.charCount ?? text?.length ?? 0;
+  // While this reading is playing the engine's position is the truth;
+  // otherwise fall back to what was persisted.
+  const offset = isCurrent ? state.offset : (reading?.progress_offset ?? 0);
+  const total = reading?.char_count ?? 0;
   const fraction = total > 0 ? Math.min(1, offset / total) : 0;
   // ~18 UTF-16 units/sec at 1× (§19.1) — elapsed and remaining as clock time.
   const unitsPerSecond = 18 * multiplier;
@@ -168,7 +186,7 @@ export default function ReaderScreen() {
     return (
       <View style={[styles.screen, { backgroundColor: pageTop }]}>
         <View style={styles.opening}>
-          <BookCover title={title} coverPath={params.coverUri ?? cover} width={200} />
+          <BookCover title={title} coverPath={coverUri ?? book?.cover} width={200} />
           <Text style={styles.openingTitle}>{title}</Text>
         </View>
         <View style={styles.openingFooter}>
@@ -192,7 +210,7 @@ export default function ReaderScreen() {
         text={text}
         fontSize={fontSize}
         active={isCurrent}
-        startOffset={bodyOffset}
+        startOffset={openingOffset}
         hue={coverHue(title)}
         coverPath={coverUri}
         onSeek={(event) => startAt(event.nativeEvent.offset)}
@@ -204,7 +222,7 @@ export default function ReaderScreen() {
       <View style={[styles.header, { paddingTop: insets.top + 60 }]} pointerEvents="none">
         <ReadingArtwork
           title={title}
-          coverPath={params.coverUri ?? cover}
+          coverPath={coverUri ?? book?.cover}
           width={54}
           radius={Radius.thumbSmall}
         />
