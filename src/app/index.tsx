@@ -1,15 +1,18 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ContinueCard } from '@/components/continue-card';
 import { MiniPlayer } from '@/components/mini-player';
-import { ShelfItem } from '@/components/shelf-item';
+import { CARD_WIDTH, ShelfItem } from '@/components/shelf-item';
 import { mark, markStart } from '@/lib/perf'; // TEMPORARY instrumentation
 import { buildLibrary, type LibraryEntry, type LibraryShelf } from '@/lib/library';
 import { RATE, usePrefs } from '@/speech/engine';
 import { Colors, Fonts, Screen, Space } from '@/theme';
+
+/** One card plus the gap after it — the stride a horizontal shelf scrolls by. */
+const CARD_STRIDE = CARD_WIDTH + Space.l;
 
 /**
  * The shelves, as they were: a full-bleed cover per card, laid out in
@@ -25,6 +28,11 @@ export default function LibraryScreen() {
   const insets = useSafeAreaInsets();
 
   const library = useMemo(() => buildLibrary([]), []);
+
+  // Three shelves only: Start here, One or two sittings, Popular classics.
+  // Eleven rows is a lot of artwork to keep mounted for a screen that shows two
+  // of them at a time.
+  const shelves = useMemo(() => library.shelves.slice(0, 3), [library]);
 
   /** A tap pushes, and hands over the artwork, title and text asset with it. */
   const openEntry = useCallback(
@@ -55,29 +63,48 @@ export default function LibraryScreen() {
   // words into minutes.
   const wordsPerMinute = 180 * (rate / RATE.default);
 
+  const renderCard = useCallback(
+    ({ item: entry }: { item: LibraryEntry }) => (
+      <ShelfItem
+        entry={entry}
+        isPlaying={false}
+        onPress={() => openEntry(entry)}
+        onPlay={() => openEntry(entry)}
+        onLongPress={noop}
+      />
+    ),
+    [noop, openEntry]
+  );
+
   const renderShelf = useCallback(
     ({ item: shelf }: { item: LibraryShelf }) => (
       <View style={styles.shelfSection}>
         <Text style={styles.sectionTitle}>{shelf.title}</Text>
         {shelf.subtitle ? <Text style={styles.sectionSubtitle}>{shelf.subtitle}</Text> : null}
-        <ScrollView
+        {/* A horizontal ScrollView mounts every card it holds, on-screen or
+            not — eleven cards of full-bleed artwork for one shelf. A FlatList
+            keeps only what is near the viewport, and a fixed card width lets it
+            skip measuring. */}
+        <FlatList
+          data={shelf.items}
+          keyExtractor={(entry) => entry.key}
+          renderItem={renderCard}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.shelf}>
-          {shelf.items.map((entry) => (
-            <ShelfItem
-              key={entry.key}
-              entry={entry}
-              isPlaying={false}
-              onPress={() => openEntry(entry)}
-              onPlay={() => openEntry(entry)}
-              onLongPress={noop}
-            />
-          ))}
-        </ScrollView>
+          contentContainerStyle={styles.shelf}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          windowSize={3}
+          removeClippedSubviews
+          getItemLayout={(_, index) => ({
+            length: CARD_STRIDE,
+            offset: CARD_STRIDE * index,
+            index,
+          })}
+        />
       </View>
     ),
-    [noop, openEntry]
+    [renderCard]
   );
 
   return (
@@ -88,7 +115,7 @@ export default function LibraryScreen() {
       </View>
 
       <FlatList
-        data={library.shelves}
+        data={shelves}
         keyExtractor={(shelf) => shelf.id}
         renderItem={renderShelf}
         contentContainerStyle={styles.content}

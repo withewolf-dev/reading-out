@@ -24,7 +24,7 @@ type Props = {
  * Everything here is white on dark by construction, so it deliberately ignores
  * the app's ink scale: the surface is artwork, not a themed background.
  */
-const CARD_WIDTH = 264;
+export const CARD_WIDTH = 264;
 const CARD_HEIGHT = 372;
 
 const Ink = {
